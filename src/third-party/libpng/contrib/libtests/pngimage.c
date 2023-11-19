@@ -845,7 +845,7 @@ buffer_read(struct display *dp, struct buffer *bp, png_bytep data,
       if (avail > size)
          avail = size;
 
-      memcpy(data, last->buffer + read_count, avail);
+      neon_memcpy(data, last->buffer + read_count, avail);
       read_count += avail;
       size -= avail;
       data += avail;
@@ -1301,7 +1301,7 @@ buffer_write(struct display *dp, struct buffer *buffer, png_bytep data,
       if (avail > size)
          avail = size;
 
-      memcpy(last->buffer + end_count, data, avail);
+      neon_memcpy(last->buffer + end_count, data, avail);
       end_count += avail;
       size -= avail;
       data += avail;

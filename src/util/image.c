@@ -31,7 +31,7 @@
 
 #define GET_PIXEL(DST, SRC, DEPTH) do { \
 	uint32_t _color = 0; \
-	memcpy(&_color, (void*) (SRC), (DEPTH)); \
+	neon_memcpy(&_color, (void*) (SRC), (DEPTH)); \
 	SHIFT_IN(_color, (DEPTH)); \
 	(DST) = _color; \
 } while (0)
@@ -39,7 +39,7 @@
 #define PUT_PIXEL(SRC, DST, DEPTH) do { \
 	uint32_t _color = (SRC); \
 	SHIFT_OUT(_color, (DEPTH)); \
-	memcpy((void*) (DST), &_color, (DEPTH)); \
+	neon_memcpy((void*) (DST), &_color, (DEPTH)); \
 } while (0);
 
 struct mImage* mImageCreate(unsigned width, unsigned height, enum mColorFormat format) {
@@ -81,7 +81,7 @@ struct mImage* mImageCreateFromConstBuffer(unsigned width, unsigned height, unsi
 	if (!image) {
 		return NULL;
 	}
-	memcpy(image->data, pixels, height * stride * image->depth);
+	neon_memcpy(image->data, pixels, height * stride * image->depth);
 	return image;
 }
 
@@ -222,7 +222,7 @@ struct mImage* mImageConvertToFormat(const struct mImage* image, enum mColorForm
 		newImage->depth = image->depth;
 		newImage->stride = image->stride;
 		newImage->data = malloc(image->stride * image->height * image->depth);
-		memcpy(newImage->data, image->data, image->stride * image->height * image->depth);
+		neon_memcpy(newImage->data, image->data, image->stride * image->height * image->depth);
 		return newImage;
 	}
 	newImage->depth = mColorFormatBytes(format);

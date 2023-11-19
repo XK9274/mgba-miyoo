@@ -533,7 +533,7 @@ void mVideoLogContextSetCompression(struct mVideoLogContext* context, bool compr
 
 void mVideoLogContextWriteHeader(struct mVideoLogContext* context, struct mCore* core) {
 	struct mVideoLogHeader header = { { 0 } };
-	memcpy(header.magic, mVL_MAGIC, sizeof(header.magic));
+	neon_memcpy(header.magic, mVL_MAGIC, sizeof(header.magic));
 	enum mPlatform platform = core->platform(core);
 	STORE_32LE(platform, 0, &header.platform);
 	STORE_32LE(context->nChannels, 0, &header.nChannels);
@@ -636,7 +636,7 @@ bool _readHeader(struct mVideoLogContext* context) {
 			context->initialStateSize = vfm->size(vfm);
 			context->initialState = anonymousMemoryMap(context->initialStateSize);
 			void* mem = vfm->map(vfm, context->initialStateSize, MAP_READ);
-			memcpy(context->initialState, mem, context->initialStateSize);
+			neon_memcpy(context->initialState, mem, context->initialStateSize);
 			vfm->unmap(vfm, mem, context->initialStateSize);
 			vfm->close(vfm);
 #else
@@ -768,7 +768,7 @@ void mVideoLogContextRewind(struct mVideoLogContext* context, struct mCore* core
 			core->loadState(core, context->initialState);
 		} else {
 			void* extendedState = anonymousMemoryMap(size);
-			memcpy(extendedState, context->initialState, context->initialStateSize);
+			neon_memcpy(extendedState, context->initialState, context->initialStateSize);
 			core->loadState(core, extendedState);
 			mappedMemoryFree(extendedState, size);
 		}

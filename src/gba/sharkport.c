@@ -43,7 +43,7 @@ static bool _importSavedata(struct GBA* gba, void* payload, size_t size) {
 			STORE_32LE(lo, i + 4, gba->memory.savedata.data);
 		}
 	} else {
-		memcpy(gba->memory.savedata.data, payload, size);
+		neon_memcpy(gba->memory.savedata.data, payload, size);
 	}
 	if (gba->memory.savedata.vf) {
 		gba->memory.savedata.vf->sync(gba->memory.savedata.vf, gba->memory.savedata.data, size);
@@ -156,7 +156,7 @@ void* GBASavedataSharkPortGetPayload(struct VFile* vf, size_t* osize, uint8_t* o
 	}
 	*osize = size;
 	if (oheader) {
-		memcpy(oheader, header, sizeof(header));
+		neon_memcpy(oheader, header, sizeof(header));
 	}
 	return payload;
 
@@ -176,7 +176,7 @@ bool GBASavedataImportSharkPort(struct GBA* gba, struct VFile* vf, bool testChec
 	}
 
 	struct GBACartridge* cart = (struct GBACartridge*) gba->memory.rom;
-	memcpy(buffer, &cart->title, 16);
+	neon_memcpy(buffer, &cart->title, 16);
 	buffer[0x10] = 0;
 	buffer[0x11] = 0;
 	buffer[0x12] = cart->checksum;
@@ -253,7 +253,7 @@ bool GBASavedataExportSharkPort(const struct GBA* gba, struct VFile* vf) {
 	}
 	size -= 0x1C;
 
-	memcpy(buffer.c, &cart->title, 16);
+	neon_memcpy(buffer.c, &cart->title, 16);
 	buffer.c[0x10] = 0;
 	buffer.c[0x11] = 0;
 	buffer.c[0x12] = cart->checksum;

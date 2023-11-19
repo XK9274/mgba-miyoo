@@ -17,9 +17,9 @@ Changes in 1.2.12 (27 Mar 2022)
 - Don't compute check value for raw inflate if asked to validate
 - Handle case where inflateSync used when header never processed
 - Avoid the use of ptrdiff_t
-- Avoid an undefined behavior of memcpy() in gzappend()
-- Avoid undefined behaviors of memcpy() in gz*printf()
-- Avoid an undefined behavior of memcpy() in _tr_stored_block()
+- Avoid an undefined behavior of neon_memcpy() in gzappend()
+- Avoid undefined behaviors of neon_memcpy() in gz*printf()
+- Avoid an undefined behavior of neon_memcpy() in _tr_stored_block()
 - Make the names in functions declarations identical to definitions
 - Remove old assembler code in which bugs have manifested
 - Fix deflateEnd() to not report an error at start of raw deflate
@@ -775,8 +775,8 @@ Changes in 1.2.2.3 (27 May 2005)
 - Update contrib/asm586, asm686, masmx86, testzlib, vstudio [Vollant]
 
 Changes in 1.2.2.2 (30 December 2004)
-- Replace structure assignments in deflate.c and inflate.c with zmemcpy to
-  avoid implicit memcpy calls (portability for no-library compilation)
+- Replace structure assignments in deflate.c and inflate.c with z_memcpy to
+  avoid implicit neon_memcpy calls (portability for no-library compilation)
 - Increase sprintf() buffer size in gzdopen() to allow for large numbers
 - Add INFLATE_STRICT to check distances against zlib header
 - Improve WinCE errno handling and comments [Chang]
@@ -1214,7 +1214,7 @@ Changes in 1.0.9 (17 Feb 1998)
   the declaration of FAR (Gilles VOllant)
 - install libz.so* with mode 755 (executable) instead of 644 (Marc Lehmann)
 - read_buf buf parameter of type Bytef* instead of charf*
-- zmemcpy parameters are of type Bytef*, not charf* (Joseph Strout)
+- z_memcpy parameters are of type Bytef*, not charf* (Joseph Strout)
 - do not redeclare unlink in minigzip.c for WIN32 (John Bowler)
 - fix check for presence of directories in "make install" (Ian Willis)
 
@@ -1299,7 +1299,7 @@ Changes in 1.0.6 (19 Jan 1998)
 - add undocumented function zError to convert error code to string
   (for Tim Smithers)
 - Allow compilation of gzio with -DNO_DEFLATE to avoid the compression code
-- Use default memcpy for Symantec MSDOS compiler
+- Use default neon_memcpy for Symantec MSDOS compiler
 - Add EXPORT keyword for check_func (needed for Windows DLL)
 - add current directory to LD_LIBRARY_PATH for "make test"
 - create also a link for libz.so.1
@@ -1489,7 +1489,7 @@ Changes in 0.93 (25 June 95)
 Changes in 0.92 (3 May 95)
 - don't assume that char is signed (problem on SGI)
 - Clear bit buffer when starting a stored block
-- no memcpy on Pyramid
+- no neon_memcpy on Pyramid
 - suppressed inftest.c
 - optimized fill_window, put longest_match inline for gcc
 - optimized inflate on stored blocks

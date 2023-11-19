@@ -605,7 +605,7 @@ void GBMBCRTCWrite(struct GB* gb) {
 	}
 
 	uint8_t rtcRegs[5];
-	memcpy(rtcRegs, gb->memory.rtcRegs, sizeof(rtcRegs));
+	neon_memcpy(rtcRegs, gb->memory.rtcRegs, sizeof(rtcRegs));
 	time_t rtcLastLatch = gb->memory.rtcLastLatch;
 	_GBMBCLatchRTC(gb->memory.rtc, rtcRegs, &rtcLastLatch);
 

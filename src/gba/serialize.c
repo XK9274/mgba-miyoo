@@ -33,7 +33,7 @@ void GBASerialize(struct GBA* gba, struct GBASerializedState* state) {
 
 	if (gba->memory.rom) {
 		state->id = ((struct GBACartridge*) gba->memory.rom)->id;
-		memcpy(state->title, ((struct GBACartridge*) gba->memory.rom)->title, sizeof(state->title));
+		neon_memcpy(state->title, ((struct GBACartridge*) gba->memory.rom)->title, sizeof(state->title));
 	} else {
 		state->id = 0;
 		memset(state->title, 0, sizeof(state->title));

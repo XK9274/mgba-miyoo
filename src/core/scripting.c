@@ -691,7 +691,7 @@ static void _rebuildMemoryMap(struct mScriptContext* context, struct mScriptCore
 		}
 		struct mScriptMemoryDomain* memadapter = calloc(1, sizeof(*memadapter));
 		memadapter->core = adapter->core;
-		memcpy(&memadapter->block, &blocks[i], sizeof(memadapter->block));
+		neon_memcpy(&memadapter->block, &blocks[i], sizeof(memadapter->block));
 		struct mScriptValue* value = mScriptValueAlloc(mSCRIPT_TYPE_MS_S(mScriptMemoryDomain));
 		value->flags = mSCRIPT_VALUE_FLAG_FREE_BUFFER;
 		value->value.opaque = memadapter;
@@ -944,7 +944,7 @@ static struct mScriptValue* _mScriptCoreAdapterGet(struct mScriptCoreAdapter* ad
 	}
 
 	struct mScriptValue* ret = malloc(sizeof(*ret));
-	memcpy(ret, &val, sizeof(*ret));
+	neon_memcpy(ret, &val, sizeof(*ret));
 	ret->refs = 1;
 	return ret;
 }

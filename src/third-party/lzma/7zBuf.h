@@ -5,6 +5,7 @@
 #define __7Z_BUF_H
 
 #include "7zTypes.h"
+#include "neon.h"
 
 EXTERN_C_BEGIN
 

@@ -85,7 +85,7 @@ static void _removeItemFromList(struct Table* table, struct TableList* list, siz
 static void _rebalance(struct Table* table) {
 	struct Table newTable;
 	TableInit(&newTable, table->tableSize * REBALANCE_THRESHOLD, NULL);
-	memcpy(&newTable.fn, &table->fn, sizeof(newTable.fn));
+	neon_memcpy(&newTable.fn, &table->fn, sizeof(newTable.fn));
 	newTable.seed = table->seed * 134775813 + 1;
 	size_t i;
 	for (i = 0; i < table->tableSize; ++i) {
@@ -164,7 +164,7 @@ void TableInsert(struct Table* table, uint32_t key, void* value) {
 	if (table->size >= table->tableSize * REBALANCE_THRESHOLD) {
 		struct Table newTable;
 		TableInit(&newTable, table->tableSize * REBALANCE_THRESHOLD, NULL);
-		memcpy(&newTable.fn, &table->fn, sizeof(newTable.fn));
+		neon_memcpy(&newTable.fn, &table->fn, sizeof(newTable.fn));
 		size_t i;
 		for (i = 0; i < table->tableSize; ++i) {
 			struct TableList* list = &table->table[i];
@@ -396,7 +396,7 @@ void HashTableInsertBinary(struct Table* table, const void* key, size_t keylen, 
 	list = _resizeAsNeeded(table, list, hash);
 	list->list[list->nEntries].key = hash;
 	list->list[list->nEntries].stringKey = malloc(keylen);
-	memcpy(list->list[list->nEntries].stringKey, key, keylen);
+	neon_memcpy(list->list[list->nEntries].stringKey, key, keylen);
 	list->list[list->nEntries].keylen = keylen;
 	list->list[list->nEntries].value = value;
 	++list->nEntries;

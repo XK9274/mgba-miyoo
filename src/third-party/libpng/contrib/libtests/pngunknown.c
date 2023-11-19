@@ -748,7 +748,7 @@ check(FILE *fp, int argc, const char **argv, png_uint_32p flags/*out*/,
                   {
                      png_byte name[5];
 
-                     memcpy(name, chunk_info[chunk].name, 5);
+                     neon_memcpy(name, chunk_info[chunk].name, 5);
                      png_set_keep_unknown_chunks(d->png_ptr, option, name, 1);
                      chunk_info[chunk].keep = option;
                   }
@@ -1016,7 +1016,7 @@ perform_one_test(FILE *fp, int argc, const char **argv,
 
    rewind(fp);
    clear_keep();
-   memcpy(flags[0], default_flags, sizeof flags[0]);
+   neon_memcpy(flags[0], default_flags, sizeof flags[0]);
 
    def = check(fp, argc, argv, flags[1], d, set_callback);
 

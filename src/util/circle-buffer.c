@@ -132,15 +132,15 @@ size_t CircleBufferWrite(struct CircleBuffer* buffer, const void* input, size_t 
 	}
 	size_t remaining = buffer->capacity - ((int8_t*) data - (int8_t*) buffer->data);
 	if (length <= remaining) {
-		memcpy(data, input, length);
+		neon_memcpy(data, input, length);
 		if (length == remaining) {
 			buffer->writePtr = buffer->data;
 		} else {
 			buffer->writePtr = (int8_t*) data + length;
 		}
 	} else {
-		memcpy(data, input, remaining);
-		memcpy(buffer->data, (const int8_t*) input + remaining, length - remaining);
+		neon_memcpy(data, input, remaining);
+		neon_memcpy(buffer->data, (const int8_t*) input + remaining, length - remaining);
 		buffer->writePtr = (int8_t*) buffer->data + length - remaining;
 	}
 
@@ -243,15 +243,15 @@ size_t CircleBufferRead(struct CircleBuffer* buffer, void* output, size_t length
 	}
 	size_t remaining = buffer->capacity - ((int8_t*) data - (int8_t*) buffer->data);
 	if (length <= remaining) {
-		memcpy(output, data, length);
+		neon_memcpy(output, data, length);
 		if (length == remaining) {
 			buffer->readPtr = buffer->data;
 		} else {
 			buffer->readPtr = (int8_t*) data + length;
 		}
 	} else {
-		memcpy(output, data, remaining);
-		memcpy((int8_t*) output + remaining, buffer->data, length - remaining);
+		neon_memcpy(output, data, remaining);
+		neon_memcpy((int8_t*) output + remaining, buffer->data, length - remaining);
 		buffer->readPtr = (int8_t*) buffer->data + length - remaining;
 	}
 
@@ -274,10 +274,10 @@ size_t CircleBufferDump(const struct CircleBuffer* buffer, void* output, size_t 
 	}
 	size_t remaining = buffer->capacity - ((int8_t*) data - (int8_t*) buffer->data);
 	if (length <= remaining) {
-		memcpy(output, data, length);
+		neon_memcpy(output, data, length);
 	} else {
-		memcpy(output, data, remaining);
-		memcpy((int8_t*) output + remaining, buffer->data, length - remaining);
+		neon_memcpy(output, data, remaining);
+		neon_memcpy((int8_t*) output + remaining, buffer->data, length - remaining);
 	}
 
 	return length;

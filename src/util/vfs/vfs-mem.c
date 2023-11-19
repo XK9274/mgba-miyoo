@@ -97,7 +97,7 @@ struct VFile* VFileMemChunk(const void* mem, size_t size) {
 	if (size) {
 		vfm->mem = anonymousMemoryMap(vfm->bufferSize);
 		if (mem) {
-			memcpy(vfm->mem, mem, size);
+			neon_memcpy(vfm->mem, mem, size);
 		}
 	} else {
 		vfm->mem = 0;
@@ -124,9 +124,9 @@ void _vfmExpand(struct VFileMem* vfm, size_t newSize) {
 		vfm->mem = anonymousMemoryMap(alignedSize);
 		if (oldBuf) {
 			if (newSize < vfm->size) {
-				memcpy(vfm->mem, oldBuf, newSize);
+				neon_memcpy(vfm->mem, oldBuf, newSize);
 			} else {
-				memcpy(vfm->mem, oldBuf, vfm->size);
+				neon_memcpy(vfm->mem, oldBuf, vfm->size);
 			}
 			mappedMemoryFree(oldBuf, vfm->bufferSize);
 		}
@@ -227,7 +227,7 @@ ssize_t _vfmRead(struct VFile* vf, void* buffer, size_t size) {
 		size = vfm->size - vfm->offset;
 	}
 	if (size) {
-		memcpy(buffer, (void*) ((uintptr_t) vfm->mem + vfm->offset), size);
+		neon_memcpy(buffer, (void*) ((uintptr_t) vfm->mem + vfm->offset), size);
 		vfm->offset += size;
 	}
 	return size;
@@ -240,7 +240,7 @@ ssize_t _vfmWrite(struct VFile* vf, const void* buffer, size_t size) {
 		size = vfm->size - vfm->offset;
 	}
 
-	memcpy((void*) ((uintptr_t) vfm->mem + vfm->offset), buffer, size);
+	neon_memcpy((void*) ((uintptr_t) vfm->mem + vfm->offset), buffer, size);
 	vfm->offset += size;
 	return size;
 }
@@ -252,7 +252,7 @@ ssize_t _vfmWriteExpanding(struct VFile* vf, const void* buffer, size_t size) {
 		_vfmExpand(vfm, vfm->offset + size);
 	}
 
-	memcpy((void*) ((uintptr_t) vfm->mem + vfm->offset), buffer, size);
+	neon_memcpy((void*) ((uintptr_t) vfm->mem + vfm->offset), buffer, size);
 	vfm->offset += size;
 	return size;
 }

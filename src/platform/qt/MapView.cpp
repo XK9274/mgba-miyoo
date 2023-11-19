@@ -240,7 +240,7 @@ void MapView::updateTilesGBA(bool) {
 			uchar* bgBits = m_rawMap.bits();
 			for (int j = 0; j < height; ++j) {
 				mBitmapCacheCleanRow(bitmapCache, m_bitmapStatus.data(), j);
-				memcpy(static_cast<void*>(&bgBits[width * j * 4]), mBitmapCacheGetRow(bitmapCache, j), width * 4);
+				neon_memcpy(static_cast<void*>(&bgBits[width * j * 4]), mBitmapCacheGetRow(bitmapCache, j), width * 4);
 			}
 			m_rawMap = m_rawMap.convertToFormat(QImage::Format_RGB32).rgbSwapped();
 		} else {

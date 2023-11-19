@@ -475,7 +475,7 @@ static void ARMDebuggerListWatchpoints(struct mDebuggerPlatform* d, struct mDebu
 			if (TableLookup(&debugger->d.p->pointOwner, point->id) != owner) {
 				continue;
 			}
-			memcpy(mWatchpointListAppend(list), point, sizeof(*point));
+			neon_memcpy(mWatchpointListAppend(list), point, sizeof(*point));
 		}
 	} else {
 		mWatchpointListCopy(list, &debugger->watchpoints);

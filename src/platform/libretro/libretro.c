@@ -850,7 +850,7 @@ bool retro_load_game(const struct retro_game_info* game) {
 	if (game->data) {
 		data = anonymousMemoryMap(game->size);
 		dataSize = game->size;
-		memcpy(data, game->data, game->size);
+		neon_memcpy(data, game->data, game->size);
 		rom = VFileFromMemory(data, game->size);
 	} else {
 		data = 0;
@@ -1337,7 +1337,7 @@ static void _updateCamera(const uint32_t* buffer, unsigned width, unsigned heigh
 	}
 	size_t i;
 	for (i = 0; i < height; ++i) {
-		memcpy(&camData[camStride * i], &buffer[pitch * i / sizeof(*buffer)], pitch);
+		neon_memcpy(&camData[camStride * i], &buffer[pitch * i / sizeof(*buffer)], pitch);
 	}
 }
 

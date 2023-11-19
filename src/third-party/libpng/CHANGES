@@ -254,14 +254,14 @@ Version 0.99b [February 4, 1998]
 
 Version 0.99c [February 7, 1998]
   More type casting.  Removed erroneous overflow test in pngmem.c.
-  Added png_buffered_memcpy() and png_buffered_memset(), apply them to rowbytes.
+  Added png_buffered_neon_memcpy() and png_buffered_memset(), apply them to rowbytes.
   Added UNIX manual pages libpng.3 (incorporating libpng.txt) and  png.5.
 
 Version 0.99d [February 11, 1998]
   Renamed "far_to_near()" "png_far_to_near()"
   Revised libpng.3
   Version 99c "buffered" operations didn't work as intended.  Replaced them
-    with png_memcpy_check() and png_memset_check().
+    with png_neon_memcpy_check() and png_memset_check().
   Added many "if (png_ptr == NULL) return" to quell compiler warnings about
     unused png_ptr, mostly in pngget.c and pngset.c.
   Check for overlength tRNS chunk present when indexed-color PLTE is read.
@@ -533,7 +533,7 @@ Version 1.0.4d [October 6, 1999]
 
 Version 1.0.4e [October 10, 1999]
   Fixed sign error in pngvcrd.c (Greg Roelofs)
-  Replaced some instances of memcpy with simple assignments in pngvcrd (GR-P)
+  Replaced some instances of neon_memcpy with simple assignments in pngvcrd (GR-P)
 
 Version 1.0.4f [October 15, 1999]
   Surrounded example.c code with #if 0 .. #endif to prevent people from
@@ -1038,7 +1038,7 @@ Version 1.0.10beta1 [March 14, 2001]
   Increased the first part of msg buffer from 16 to 18 in png_chunk_warning().
 
 Version 1.0.10rc1 [March 23, 2001]
-  Changed all instances of memcpy, strcpy, and strlen to png_memcpy, png_strcpy,
+  Changed all instances of neon_memcpy, strcpy, and strlen to png_neon_memcpy, png_strcpy,
     and png_strlen.
   Revised png_mmx_supported() function in pnggccrd.c to return proper value.
   Fixed bug in progressive reading (pngpread.c) with small images (height < 8).
@@ -1383,7 +1383,7 @@ Version 1.2.6beta3 [July 18, 2004]
     from version 1.2.6beta1; these will be postponed until version 1.2.7.
     Version 1.2.6 is going to be a simple bugfix release.
   Changed the one instance of "ln -sf" to "ln -f -s" in each Sun makefile.
-  Fixed potential overrun in pngerror.c by using strncpy instead of memcpy.
+  Fixed potential overrun in pngerror.c by using strncpy instead of neon_memcpy.
   Added "#!/bin/sh" at the top of configure, for recognition of the
     'x' flag under Cygwin (Cosmin).
   Optimized vacuous tests that silence compiler warnings, in png.c (Cosmin).
@@ -2035,7 +2035,7 @@ Version 1.4.0beta11 [August 19, 2006]
   Changed prototype of png_get_compression_buffer_size() and
     png_set_compression_buffer_size() to work with png_size_t instead of
     png_uint_32 (Cosmin).
-  Removed png_memcpy_check() and png_memset_check() (Cosmin).
+  Removed png_neon_memcpy_check() and png_memset_check() (Cosmin).
   Fixed a typo (png_byte --> png_bytep) in libpng.3 and libpng.txt (Cosmin).
   Clarified that png_zalloc() does not clear the allocated memory,
     and png_zalloc() and png_zfree() cannot be PNGAPI (Cosmin).
@@ -3858,11 +3858,11 @@ Version 1.6.0beta04 [December 30, 2011]
     that.
   Moved AC_MSG_CHECKING([if libraries can be versioned]) later to the proper
     location in configure.ac (Gilles Espinasse).
-  Changed png_memcpy to C assignment where appropriate. Changed all those
-    uses of png_memcpy that were doing a simple assignment to assignments
+  Changed png_neon_memcpy to C assignment where appropriate. Changed all those
+    uses of png_neon_memcpy that were doing a simple assignment to assignments
     (all those cases where the thing being copied is a non-array C L-value).
   Added some error checking to png_set_*() routines.
-  Removed the reference to the non-exported function png_memcpy() from
+  Removed the reference to the non-exported function png_neon_memcpy() from
     example.c.
   Fixed the Visual C 64-bit build - it requires jmp_buf to be aligned, but
     it had become misaligned.
@@ -4200,9 +4200,9 @@ Version 1.6.0beta27 [August 11, 2012]
     Now "make check" will succeed even if libpng is compiled with -DPNG_NO_READ
     or -DPNG_NO_WRITE.  The tests performed are reduced, but the basic reading
     and writing of a PNG file is always tested by one or more of the tests.
-  Consistently use strlen(), memset(), memcpy(), and memcmp() instead of the
-    png_strlen(), png_memset(), png_memcpy(), and png_memcmp() macros.
-  Removed the png_sizeof(), png_strlen(), png_memset(), png_memcpy(), and
+  Consistently use strlen(), memset(), neon_memcpy(), and memcmp() instead of the
+    png_strlen(), png_memset(), png_neon_memcpy(), and png_memcmp() macros.
+  Removed the png_sizeof(), png_strlen(), png_memset(), png_neon_memcpy(), and
     png_memcmp() macros.
   Work around gcc 3.x and Microsoft Visual Studio 2010 complaints. Both object
     to the split initialization of num_chunks.
@@ -5539,7 +5539,7 @@ Version 1.6.22beta03 [March 9, 2016]
 Version 1.6.22beta04 [April 5, 2016]
   Force GCC compilation to C89 if needed (Dagobert Michelsen).
   SSE filter speed improvements for bpp=3:
-    memcpy-free implementations of load3() / store3().
+    neon_memcpy-free implementations of load3() / store3().
     call load3() only when needed at the end of a scanline.
 
 Version 1.6.22beta05 [April 27, 2016]
@@ -5590,7 +5590,7 @@ Version 1.6.23rc01 [June 2, 2016]
 
 Version 1.6.23rc02 [June 4, 2016]
   Fixed undefined behavior in png_push_save_buffer(). Do not call
-    memcpy() with a null source, even if count is zero (Leon Scroggins III).
+    neon_memcpy() with a null source, even if count is zero (Leon Scroggins III).
 
 Version 1.6.23 [June 9, 2016]
   Fixed bad link to RFC2083 in png.5 (Nikola Forro).
@@ -6069,7 +6069,7 @@ Version 1.6.36 [December 1, 2018]
     (Contributed by Richard Townsend, ARM Holdings)
   Fixed manipulation of machine-specific optimization options.
     (Contributed by Vicki Pfau)
-  Used memcpy instead of manual pointer arithmetic on Intel SSE2.
+  Used neon_memcpy instead of manual pointer arithmetic on Intel SSE2.
     (Contributed by Samuel Williams)
   Fixed build errors with MSVC on ARM64.
     (Contributed by Zhijie Liang)

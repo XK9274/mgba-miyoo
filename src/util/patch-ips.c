@@ -47,7 +47,7 @@ bool _IPSApplyPatch(struct Patch* patch, const void* in, size_t inSize, void* ou
 	if (patch->vf->seek(patch->vf, 5, SEEK_SET) != 5) {
 		return false;
 	}
-	memcpy(out, in, inSize > outSize ? outSize : inSize);
+	neon_memcpy(out, in, inSize > outSize ? outSize : inSize);
 	uint8_t* buf = out;
 
 	while (true) {

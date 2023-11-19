@@ -140,7 +140,7 @@ static enum GUIKeyboardStatus _keyboardRun(struct GUIKeyboardParams* keyboard) {
 		if (i < bytes) {
 			break;
 		}
-		memcpy(utf8Buffer, buffer, bytes);
+		neon_memcpy(utf8Buffer, buffer, bytes);
 		utf8Buffer += bytes;
 		i -= bytes;
 	}

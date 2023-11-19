@@ -1825,8 +1825,8 @@ png_write_sCAL_s(png_structrp png_ptr, int unit, png_const_charp width,
    }
 
    buf[0] = (png_byte)unit;
-   memcpy(buf + 1, width, wlen + 1);      /* Append the '\0' here */
-   memcpy(buf + wlen + 2, height, hlen);  /* Do NOT append the '\0' here */
+   neon_memcpy(buf + 1, width, wlen + 1);      /* Append the '\0' here */
+   neon_memcpy(buf + wlen + 2, height, hlen);  /* Do NOT append the '\0' here */
 
    png_debug1(3, "sCAL total length = %u", (unsigned int)total_len);
    png_write_complete_chunk(png_ptr, png_sCAL, buf, total_len);
@@ -2245,7 +2245,7 @@ png_do_write_interlace(png_row_infop row_info, png_bytep row, int pass)
 
                /* Move the pixel */
                if (dp != sp)
-                  memcpy(dp, sp, pixel_bytes);
+                  neon_memcpy(dp, sp, pixel_bytes);
 
                /* Next pixel */
                dp += pixel_bytes;

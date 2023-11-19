@@ -385,7 +385,7 @@ void GBAOverrideApplyDefaults(struct GBA* gba, const struct Configuration* overr
 	struct GBACartridgeOverride override = { .idleLoop = IDLE_LOOP_NONE };
 	const struct GBACartridge* cart = (const struct GBACartridge*) gba->memory.rom;
 	if (cart) {
-		memcpy(override.id, &cart->id, sizeof(override.id));
+		neon_memcpy(override.id, &cart->id, sizeof(override.id));
 
 		static const uint32_t pokemonTable[] = {
 			// Emerald

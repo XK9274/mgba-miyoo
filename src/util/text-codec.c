@@ -36,7 +36,7 @@ static void _insertLeaf(struct TextCodecNode* node, uint8_t* word, size_t wordLe
 	if (!wordLength) {
 		node->leafLength = outputLength;
 		node->leaf = malloc(outputLength);
-		memcpy(node->leaf, output, outputLength);
+		neon_memcpy(node->leaf, output, outputLength);
 		return;
 	}
 	struct TextCodecNode* subnode = TableLookup(&node->children, word[0]);
@@ -153,7 +153,7 @@ static ssize_t _TextCodecFinishInternal(struct TextCodecNode* node, uint8_t* out
 	if (node->leafLength == 0) {
 		return -1;
 	}
-	memcpy(output, node->leaf, outputLength);
+	neon_memcpy(output, node->leaf, outputLength);
 	return node->leafLength;
 }
 

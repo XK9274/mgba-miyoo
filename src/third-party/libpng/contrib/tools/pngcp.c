@@ -672,7 +672,7 @@ text_stash(struct display *dp)
          display_log(dp, APP_ERROR, "text chunks: stash malloc failed");
 
       else
-         memcpy(dp->text_ptr, chunks, dp->num_text * sizeof *chunks);
+         neon_memcpy(dp->text_ptr, chunks, dp->num_text * sizeof *chunks);
    }
 
    dp->text_stashed = 1; /* regardless of whether there are chunks or not */
@@ -1648,7 +1648,7 @@ makename(struct display *dp, const char *dir, const char *infile)
          if (infile[istart] == '/')
             display_log(dp, INTERNAL_ERROR, "infile with trailing /");
 
-         memcpy(dp->namebuf, dir, dsize);
+         neon_memcpy(dp->namebuf, dir, dsize);
          if (dsize > 0 && dp->namebuf[dsize-1] != '/')
             dp->namebuf[dsize++] = '/';
 
@@ -1661,7 +1661,7 @@ makename(struct display *dp, const char *dir, const char *infile)
 
          if (dsize+isize < (sizeof dp->namebuf)) /* dsize + infile + '\0' */
          {
-            memcpy(dp->namebuf+dsize, infile, isize+1);
+            neon_memcpy(dp->namebuf+dsize, infile, isize+1);
 
             if (isdir(dp, dp->namebuf))
                display_log(dp, USER_ERROR, "%s: output file is a directory",

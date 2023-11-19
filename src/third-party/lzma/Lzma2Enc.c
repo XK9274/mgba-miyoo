@@ -173,7 +173,7 @@ static SRes Lzma2EncInt_EncodeSubblock(CLzma2EncInt *p, Byte *outBuf,
       outBuf[destPos++] = (Byte)(p->srcPos == 0 ? LZMA2_CONTROL_COPY_RESET_DIC : LZMA2_CONTROL_COPY_NO_RESET);
       outBuf[destPos++] = (Byte)((u - 1) >> 8);
       outBuf[destPos++] = (Byte)(u - 1);
-      memcpy(outBuf + destPos, LzmaEnc_GetCurBuf(p->enc) - unpackSize, u);
+      neon_memcpy(outBuf + destPos, LzmaEnc_GetCurBuf(p->enc) - unpackSize, u);
       unpackSize -= u;
       destPos += u;
       p->srcPos += u;
@@ -703,7 +703,7 @@ static SRes Lzma2Enc_MtCallback_Write(void *pp, unsigned outBufIndex)
   
   if (size > me->outBuf_Rem)
     return SZ_ERROR_OUTPUT_EOF;
-  memcpy(me->outBuf, data, size);
+  neon_memcpy(me->outBuf, data, size);
   me->outBuf_Rem -= size;
   me->outBuf += size;
   return SZ_OK;

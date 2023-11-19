@@ -128,7 +128,7 @@ typedef png_byte *png_const_bytep;
 
 #include <float.h>  /* For floating point constants */
 #include <stdlib.h> /* For malloc */
-#include <string.h> /* For memcpy, memset */
+#include <string.h> /* For neon_memcpy, memset */
 #include <math.h>   /* For floor */
 
 /* Convenience macros. */
@@ -622,7 +622,7 @@ static void
 row_copy(png_bytep toBuffer, png_const_bytep fromBuffer, unsigned int bitWidth,
       int littleendian)
 {
-   memcpy(toBuffer, fromBuffer, bitWidth >> 3);
+   neon_memcpy(toBuffer, fromBuffer, bitWidth >> 3);
 
    if ((bitWidth & 7) != 0)
    {
@@ -1355,7 +1355,7 @@ store_write(png_structp ppIn, png_bytep pb, size_t st)
          if (cb  > chunklen - chunkpos/* bytes left in chunk*/)
             cb = (size_t)/*SAFE*/(chunklen - chunkpos);
 
-         memcpy(ps->new.buffer + writepos, pb, cb);
+         neon_memcpy(ps->new.buffer + writepos, pb, cb);
          chunkpos += (png_uint_32)/*SAFE*/cb;
          pb += cb;
          writepos += cb;
@@ -1453,7 +1453,7 @@ store_read_imp(png_store *ps, png_bytep pb, size_t st)
       if (cbAvail > 0)
       {
          if (cbAvail > st) cbAvail = st;
-         memcpy(pb, ps->next->buffer + ps->readpos, cbAvail);
+         neon_memcpy(pb, ps->next->buffer + ps->readpos, cbAvail);
          st -= cbAvail;
          pb += cbAvail;
          ps->readpos += cbAvail;
@@ -1921,8 +1921,8 @@ store_malloc(png_structp ppIn, png_alloc_size_t cb)
       pool->total += cb;
 
       new->size = cb;
-      memcpy(new->mark, pool->mark, sizeof new->mark);
-      memcpy((png_byte*)(new+1) + cb, pool->mark, sizeof pool->mark);
+      neon_memcpy(new->mark, pool->mark, sizeof new->mark);
+      neon_memcpy((png_byte*)(new+1) + cb, pool->mark, sizeof pool->mark);
       new->pool = pool;
       new->next = pool->list;
       pool->list = new;
@@ -3187,7 +3187,7 @@ modifier_read_imp(png_modifier *pm, png_bytep pb, size_t st)
       if (cb > st)
          cb = st;
 
-      memcpy(pb, pm->buffer + pm->buffer_position, cb);
+      neon_memcpy(pb, pm->buffer + pm->buffer_position, cb);
       st -= cb;
       pb += cb;
       pm->buffer_position += cb;
@@ -4033,7 +4033,7 @@ interlace_row(png_bytep buffer, png_const_bytep imageRow,
 {
    png_uint_32 xin, xout, xstep;
 
-   /* Note that this can, trivially, be optimized to a memcpy on pass 7, the
+   /* Note that this can, trivially, be optimized to a neon_memcpy on pass 7, the
     * code is presented this way to make it easier to understand.  In practice
     * consult the code in the libpng source to see other ways of doing this.
     *
@@ -5017,7 +5017,7 @@ standard_palette_init(standard_display *dp)
    if (dp->npalette > 0)
    {
       int i = dp->npalette;
-      memcpy(dp->palette, palette, i * sizeof *palette);
+      neon_memcpy(dp->palette, palette, i * sizeof *palette);
 
       /* Check for a non-opaque palette entry: */
       while (--i >= 0)

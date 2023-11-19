@@ -332,14 +332,14 @@ void GBVideoReset(struct GBVideo* video) {
 		} else {
 			video->renderer->sgbCharRam = anonymousMemoryMap(SGB_SIZE_CHAR_RAM);
 		}
-		memcpy(video->renderer->sgbCharRam, _defaultBorderChardata, sizeof(_defaultBorderChardata));
+		neon_memcpy(video->renderer->sgbCharRam, _defaultBorderChardata, sizeof(_defaultBorderChardata));
 
 		if (video->renderer->sgbMapRam) {
 			memset(video->renderer->sgbMapRam, 0, SGB_SIZE_MAP_RAM);
 		} else {
 			video->renderer->sgbMapRam = anonymousMemoryMap(SGB_SIZE_MAP_RAM);
 		}
-		memcpy(video->renderer->sgbMapRam, _defaultBorderTilemap, sizeof(_defaultBorderTilemap));
+		neon_memcpy(video->renderer->sgbMapRam, _defaultBorderTilemap, sizeof(_defaultBorderTilemap));
 		int i;
 		for (i = 0; i < 16; ++i) {
 			STORE_16LE(_defaultBorderPalette[i], 0x800 + i * 2, video->renderer->sgbMapRam);
@@ -461,7 +461,7 @@ void GBVideoDummyRendererCreate(struct GBVideoRenderer* renderer) {
 		.getPixels = GBVideoDummyRendererGetPixels,
 		.putPixels = GBVideoDummyRendererPutPixels,
 	};
-	memcpy(renderer, &dummyRenderer, sizeof(*renderer));
+	neon_memcpy(renderer, &dummyRenderer, sizeof(*renderer));
 }
 
 void GBVideoAssociateRenderer(struct GBVideo* video, struct GBVideoRenderer* renderer) {
@@ -910,7 +910,7 @@ void GBVideoWriteSGBPacket(struct GBVideo* video, uint8_t* data) {
 		video->sgbCommandHeader = data[0];
 	}
 	--video->sgbCommandHeader;
-	memcpy(&video->sgbPacketBuffer[video->sgbBufferIndex << 4], data, 16);
+	neon_memcpy(&video->sgbPacketBuffer[video->sgbBufferIndex << 4], data, 16);
 	++video->sgbBufferIndex;
 	if (video->sgbCommandHeader & 7) {
 		return;
@@ -1146,8 +1146,8 @@ void GBVideoSerialize(const struct GBVideo* video, struct GBSerializedState* sta
 	STORE_32LE(video->modeEvent.when - mTimingCurrentTime(&video->p->timing), 0, &state->video.nextMode);
 	STORE_32LE(video->frameEvent.when - mTimingCurrentTime(&video->p->timing), 0, &state->video.nextFrame);
 
-	memcpy(state->vram, video->vram, GB_SIZE_VRAM);
-	memcpy(state->oam, &video->oam.raw, GB_SIZE_OAM);
+	neon_memcpy(state->vram, video->vram, GB_SIZE_VRAM);
+	neon_memcpy(state->oam, &video->oam.raw, GB_SIZE_OAM);
 }
 
 void GBVideoDeserialize(struct GBVideo* video, const struct GBSerializedState* state) {
@@ -1206,8 +1206,8 @@ void GBVideoDeserialize(struct GBVideo* video, const struct GBSerializedState* s
 		video->renderer->writePalette(video->renderer, i, video->palette[i]);
 	}
 
-	memcpy(video->vram, state->vram, GB_SIZE_VRAM);
-	memcpy(&video->oam.raw, state->oam, GB_SIZE_OAM);
+	neon_memcpy(video->vram, state->vram, GB_SIZE_VRAM);
+	neon_memcpy(&video->oam.raw, state->oam, GB_SIZE_OAM);
 
 	_cleanOAM(video, video->ly);
 	GBVideoSwitchBank(video, video->vramCurrentBank);

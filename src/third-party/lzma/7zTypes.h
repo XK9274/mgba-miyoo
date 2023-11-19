@@ -9,6 +9,7 @@
 #endif
 
 #include <stddef.h>
+#include "neon.h"
 
 #ifndef EXTERN_C_BEGIN
 #ifdef __cplusplus

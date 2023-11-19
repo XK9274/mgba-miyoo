@@ -371,10 +371,10 @@ static void _gameLoaded(struct mGUIRunner* runner) {
 
 static void _gameUnloaded(struct mGUIRunner* runner) {
 	HidVibrationValue values[4];
-	memcpy(&values[0], &vibrationStop, sizeof(rumble.value));
-	memcpy(&values[1], &vibrationStop, sizeof(rumble.value));
-	memcpy(&values[2], &vibrationStop, sizeof(rumble.value));
-	memcpy(&values[3], &vibrationStop, sizeof(rumble.value));
+	neon_memcpy(&values[0], &vibrationStop, sizeof(rumble.value));
+	neon_memcpy(&values[1], &vibrationStop, sizeof(rumble.value));
+	neon_memcpy(&values[2], &vibrationStop, sizeof(rumble.value));
+	neon_memcpy(&values[3], &vibrationStop, sizeof(rumble.value));
 	hidSendVibrationValues(vibrationDeviceHandles, values, 4);
 }
 
@@ -510,15 +510,15 @@ static void _drawFrame(struct mGUIRunner* runner, bool faded) {
 	if (rumble.up) {
 		rumble.value.amp_low = rumble.up / (float) (rumble.up + rumble.down);
 		rumble.value.amp_high = rumble.up / (float) (rumble.up + rumble.down);
-		memcpy(&values[0], &rumble.value, sizeof(rumble.value));
-		memcpy(&values[1], &rumble.value, sizeof(rumble.value));
-		memcpy(&values[2], &rumble.value, sizeof(rumble.value));
-		memcpy(&values[3], &rumble.value, sizeof(rumble.value));
+		neon_memcpy(&values[0], &rumble.value, sizeof(rumble.value));
+		neon_memcpy(&values[1], &rumble.value, sizeof(rumble.value));
+		neon_memcpy(&values[2], &rumble.value, sizeof(rumble.value));
+		neon_memcpy(&values[3], &rumble.value, sizeof(rumble.value));
 	} else {
-		memcpy(&values[0], &vibrationStop, sizeof(rumble.value));
-		memcpy(&values[1], &vibrationStop, sizeof(rumble.value));
-		memcpy(&values[2], &vibrationStop, sizeof(rumble.value));
-		memcpy(&values[3], &vibrationStop, sizeof(rumble.value));
+		neon_memcpy(&values[0], &vibrationStop, sizeof(rumble.value));
+		neon_memcpy(&values[1], &vibrationStop, sizeof(rumble.value));
+		neon_memcpy(&values[2], &vibrationStop, sizeof(rumble.value));
+		neon_memcpy(&values[3], &vibrationStop, sizeof(rumble.value));
 	}
 	hidSendVibrationValues(vibrationDeviceHandles, values, 4);
 	rumble.up = 0;

@@ -222,16 +222,16 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 #endif
 #ifdef HAVE_MEMCPY
 #  ifdef SMALL_MEDIUM /* MSDOS small or medium model */
-#    define zmemcpy _fmemcpy
+#    define z_memcpy _fneon_memcpy
 #    define zmemcmp _fmemcmp
 #    define zmemzero(dest, len) _fmemset(dest, 0, len)
 #  else
-#    define zmemcpy memcpy
+#    define z_memcpy neon_memcpy
 #    define zmemcmp memcmp
 #    define zmemzero(dest, len) memset(dest, 0, len)
 #  endif
 #else
-   void ZLIB_INTERNAL zmemcpy OF((Bytef* dest, const Bytef* source, uInt len));
+   void ZLIB_INTERNAL z_memcpy OF((Bytef* dest, const Bytef* source, uInt len));
    int ZLIB_INTERNAL zmemcmp OF((const Bytef* s1, const Bytef* s2, uInt len));
    void ZLIB_INTERNAL zmemzero OF((Bytef* dest, uInt len));
 #endif

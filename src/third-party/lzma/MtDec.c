@@ -446,7 +446,7 @@ static WRes ThreadFunc2(CMtDecThread *t)
                 }
                 
                 if (crossSize != 0)
-                  memcpy(data, parseData, size);
+                  neon_memcpy(data, parseData, size);
                 p->crossStart = 0;
                 p->crossEnd = 0;
                 break;
@@ -454,7 +454,7 @@ static WRes ThreadFunc2(CMtDecThread *t)
 
               if (crossSize != 0)
               {
-                memcpy(data, parseData, parse.srcSize);
+                neon_memcpy(data, parseData, parse.srcSize);
                 p->crossStart += parse.srcSize;
               }
 
@@ -482,7 +482,7 @@ static WRes ThreadFunc2(CMtDecThread *t)
                   p->crossEnd = 0;
 
                   if (crossSize != 0)
-                    memcpy(data + parse.srcSize, parseData + parse.srcSize, size - parse.srcSize); // we need all data
+                    neon_memcpy(data + parse.srcSize, parseData + parse.srcSize, size - parse.srcSize); // we need all data
                   afterEndData_Size = size - parse.srcSize;
                   afterEndData = parseData + parse.srcSize;
 
@@ -518,7 +518,7 @@ static WRes ThreadFunc2(CMtDecThread *t)
                       inDataSize -= crSize;
                       p->crossEnd = crSize;
                       p->crossStart = 0;
-                      memcpy(cr, parseData + parse.srcSize, crSize);
+                      neon_memcpy(cr, parseData + parse.srcSize, crSize);
                     }
                   }
 

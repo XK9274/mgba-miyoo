@@ -580,7 +580,7 @@ void _drawTex(vita2d_texture* t, unsigned width, unsigned height, bool faded, bo
 			}
 		}
 		if (height < vita2d_texture_get_height(t)) {
-			memcpy(&texpixels[height * 256], &texpixels[(height - 1) * 256], 1024);
+			neon_memcpy(&texpixels[height * 256], &texpixels[(height - 1) * 256], 1024);
 		}
 	}
 	vita2d_draw_texture_tint_part_scale(t,
@@ -626,7 +626,7 @@ void mPSP2DrawScreenshot(struct mGUIRunner* runner, const uint32_t* pixels, unsi
 	uint32_t* texpixels = vita2d_texture_get_datap(screenshot);
 	unsigned y;
 	for (y = 0; y < height; ++y) {
-		memcpy(&texpixels[256 * y], &pixels[width * y], width * 4);
+		neon_memcpy(&texpixels[256 * y], &pixels[width * y], width * 4);
 	}
 	_drawTex(screenshot, width, height, faded, false);
 }

@@ -151,7 +151,7 @@ png_realloc_array,(png_const_structrp png_ptr, png_const_voidp old_array,
           * overflow.
           */
          if (old_elements > 0)
-            memcpy(new_array, old_array, element_size*(unsigned)old_elements);
+            neon_memcpy(new_array, old_array, element_size*(unsigned)old_elements);
 
          memset((char*)new_array + element_size*(unsigned)old_elements, 0,
              element_size*(unsigned)add_elements);

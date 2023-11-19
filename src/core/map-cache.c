@@ -92,14 +92,14 @@ static inline void _cleanTile(struct mMapCache* cache, const color_t* tile, colo
 	int x, y;
 	switch (mMapCacheEntryFlagsGetMirror(status->flags)) {
 	case 0:
-		memcpy(mapOut, tile, sizeof(color_t) * 8);
-		memcpy(&mapOut[stride], &tile[0x08], sizeof(color_t) * 8);
-		memcpy(&mapOut[stride * 2], &tile[0x10], sizeof(color_t) * 8);
-		memcpy(&mapOut[stride * 3], &tile[0x18], sizeof(color_t) * 8);
-		memcpy(&mapOut[stride * 4], &tile[0x20], sizeof(color_t) * 8);
-		memcpy(&mapOut[stride * 5], &tile[0x28], sizeof(color_t) * 8);
-		memcpy(&mapOut[stride * 6], &tile[0x30], sizeof(color_t) * 8);
-		memcpy(&mapOut[stride * 7], &tile[0x38], sizeof(color_t) * 8);
+		neon_memcpy(mapOut, tile, sizeof(color_t) * 8);
+		neon_memcpy(&mapOut[stride], &tile[0x08], sizeof(color_t) * 8);
+		neon_memcpy(&mapOut[stride * 2], &tile[0x10], sizeof(color_t) * 8);
+		neon_memcpy(&mapOut[stride * 3], &tile[0x18], sizeof(color_t) * 8);
+		neon_memcpy(&mapOut[stride * 4], &tile[0x20], sizeof(color_t) * 8);
+		neon_memcpy(&mapOut[stride * 5], &tile[0x28], sizeof(color_t) * 8);
+		neon_memcpy(&mapOut[stride * 6], &tile[0x30], sizeof(color_t) * 8);
+		neon_memcpy(&mapOut[stride * 7], &tile[0x38], sizeof(color_t) * 8);
 		break;
 	case 1:
 		for (y = 0; y < 8; ++y) {
@@ -109,14 +109,14 @@ static inline void _cleanTile(struct mMapCache* cache, const color_t* tile, colo
 		}
 		break;
 	case 2:
-		memcpy(&mapOut[stride * 7], tile, sizeof(color_t) * 8);
-		memcpy(&mapOut[stride * 6], &tile[0x08], sizeof(color_t) * 8);
-		memcpy(&mapOut[stride * 5], &tile[0x10], sizeof(color_t) * 8);
-		memcpy(&mapOut[stride * 4], &tile[0x18], sizeof(color_t) * 8);
-		memcpy(&mapOut[stride * 3], &tile[0x20], sizeof(color_t) * 8);
-		memcpy(&mapOut[stride * 2], &tile[0x28], sizeof(color_t) * 8);
-		memcpy(&mapOut[stride], &tile[0x30], sizeof(color_t) * 8);
-		memcpy(mapOut, &tile[0x38], sizeof(color_t) * 8);
+		neon_memcpy(&mapOut[stride * 7], tile, sizeof(color_t) * 8);
+		neon_memcpy(&mapOut[stride * 6], &tile[0x08], sizeof(color_t) * 8);
+		neon_memcpy(&mapOut[stride * 5], &tile[0x10], sizeof(color_t) * 8);
+		neon_memcpy(&mapOut[stride * 4], &tile[0x18], sizeof(color_t) * 8);
+		neon_memcpy(&mapOut[stride * 3], &tile[0x20], sizeof(color_t) * 8);
+		neon_memcpy(&mapOut[stride * 2], &tile[0x28], sizeof(color_t) * 8);
+		neon_memcpy(&mapOut[stride], &tile[0x30], sizeof(color_t) * 8);
+		neon_memcpy(mapOut, &tile[0x38], sizeof(color_t) * 8);
 		break;
 	case 3:
 		for (y = 0; y < 8; ++y) {

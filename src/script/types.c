@@ -400,7 +400,7 @@ bool _wstrCast(const struct mScriptValue* input, const struct mScriptType* type,
 	if (unwrapped->type != mSCRIPT_TYPE_MS_STR) {
 		return false;
 	}
-	memcpy(output, input, sizeof(*output));
+	neon_memcpy(output, input, sizeof(*output));
 	output->type = type;
 	return true;
 }
@@ -413,7 +413,7 @@ bool _wlistCast(const struct mScriptValue* input, const struct mScriptType* type
 	if (unwrapped->type != mSCRIPT_TYPE_MS_LIST) {
 		return false;
 	}
-	memcpy(output, input, sizeof(*output));
+	neon_memcpy(output, input, sizeof(*output));
 	output->type = type;
 	return true;
 }
@@ -426,7 +426,7 @@ bool _wtableCast(const struct mScriptValue* input, const struct mScriptType* typ
 	if (unwrapped->type != mSCRIPT_TYPE_MS_TABLE) {
 		return false;
 	}
-	memcpy(output, input, sizeof(*output));
+	neon_memcpy(output, input, sizeof(*output));
 	output->type = type;
 	return true;
 }
@@ -920,7 +920,7 @@ void mScriptValueDeref(struct mScriptValue* val) {
 
 void mScriptValueWrap(struct mScriptValue* value, struct mScriptValue* out) {
 	if (value->refs == mSCRIPT_VALUE_UNREF) {
-		memcpy(out, value, sizeof(*out));
+		neon_memcpy(out, value, sizeof(*out));
 		return;
 	}
 	out->refs = mSCRIPT_VALUE_UNREF;
@@ -930,7 +930,7 @@ void mScriptValueWrap(struct mScriptValue* value, struct mScriptValue* out) {
 	case mSCRIPT_TYPE_FLOAT:
 	case mSCRIPT_TYPE_WRAPPER:
 		out->type = value->type;
-		memcpy(&out->value, &value->value, sizeof(out->value));
+		neon_memcpy(&out->value, &value->value, sizeof(out->value));
 		return;
 	default:
 		break;
@@ -985,7 +985,7 @@ struct mScriptValue* mScriptStringCreateFromBytes(const void* string, size_t siz
 	internal->size = size;
 	internal->length = 0;
 	internal->buffer = malloc(size + 1);
-	memcpy(internal->buffer, string, size);
+	neon_memcpy(internal->buffer, string, size);
 	internal->buffer[size] = '\0';
 	return val;
 }
@@ -1197,7 +1197,7 @@ static void _mScriptClassInit(struct mScriptTypeClass* cls, const struct mScript
 			break;
 		case mSCRIPT_CLASS_INIT_INSTANCE_MEMBER:
 			member = calloc(1, sizeof(*member));
-			memcpy(member, &detail->info.member, sizeof(*member));
+			neon_memcpy(member, &detail->info.member, sizeof(*member));
 			if (docstring) {
 				member->docstring = docstring;
 				docstring = NULL;
@@ -1209,7 +1209,7 @@ static void _mScriptClassInit(struct mScriptTypeClass* cls, const struct mScript
 			break;
 		case mSCRIPT_CLASS_INIT_INIT:
 			cls->alloc = calloc(1, sizeof(*member));
-			memcpy(cls->alloc, &detail->info.member, sizeof(*member));
+			neon_memcpy(cls->alloc, &detail->info.member, sizeof(*member));
 			if (docstring) {
 				cls->alloc->docstring = docstring;
 				docstring = NULL;
@@ -1217,7 +1217,7 @@ static void _mScriptClassInit(struct mScriptTypeClass* cls, const struct mScript
 			break;
 		case mSCRIPT_CLASS_INIT_DEINIT:
 			cls->free = calloc(1, sizeof(*member));
-			memcpy(cls->free, &detail->info.member, sizeof(*member));
+			neon_memcpy(cls->free, &detail->info.member, sizeof(*member));
 			if (docstring) {
 				cls->free->docstring = docstring;
 				docstring = NULL;
@@ -1225,7 +1225,7 @@ static void _mScriptClassInit(struct mScriptTypeClass* cls, const struct mScript
 			break;
 		case mSCRIPT_CLASS_INIT_GET:
 			cls->get = calloc(1, sizeof(*member));
-			memcpy(cls->get, &detail->info.member, sizeof(*member));
+			neon_memcpy(cls->get, &detail->info.member, sizeof(*member));
 			if (docstring) {
 				cls->get->docstring = docstring;
 				docstring = NULL;
@@ -1233,7 +1233,7 @@ static void _mScriptClassInit(struct mScriptTypeClass* cls, const struct mScript
 			break;
 		case mSCRIPT_CLASS_INIT_SET:
 			member = calloc(1, sizeof(*member));
-			memcpy(member, &detail->info.member, sizeof(*member));
+			neon_memcpy(member, &detail->info.member, sizeof(*member));
 			if (docstring) {
 				member->docstring = docstring;
 				docstring = NULL;
@@ -1411,7 +1411,7 @@ bool mScriptObjectGet(struct mScriptValue* obj, const char* member, struct mScri
 			mScriptFrameDeinit(&frame);
 			return false;
 		}
-		memcpy(val, mScriptListGetPointer(&frame.returnValues, 0), sizeof(*val));
+		neon_memcpy(val, mScriptListGetPointer(&frame.returnValues, 0), sizeof(*val));
 		mScriptFrameDeinit(&frame);
 		return true;
 	}
@@ -1648,7 +1648,7 @@ bool mScriptObjectCast(const struct mScriptValue* input, const struct mScriptTyp
 			return false;
 		}
 		if (cast.type == type) {
-			memcpy(output, &cast, sizeof(*output));
+			neon_memcpy(output, &cast, sizeof(*output));
 			return true;
 		}
 		return mScriptCast(type, &cast, output);
@@ -1705,7 +1705,7 @@ struct mScriptValue* mScriptObjectBindLambda(struct mScriptValue* obj, const cha
 	if (args) {
 		size_t i;
 		for (i = 0; i < mScriptListSize(args); ++i) {
-			memcpy(mScriptListAppend(&arguments), mScriptListGetConstPointer(args, i), sizeof(struct mScriptValue));
+			neon_memcpy(mScriptListAppend(&arguments), mScriptListGetConstPointer(args, i), sizeof(struct mScriptValue));
 		}
 	}
 
@@ -1808,7 +1808,7 @@ bool mScriptCoerceFrame(const struct mScriptTypeTuple* types, struct mScriptList
 		if (!types->defaults[i].type) {
 			return false;
 		}
-		memcpy(mScriptListAppend(frame), &types->defaults[i], sizeof(struct mScriptValue));
+		neon_memcpy(mScriptListAppend(frame), &types->defaults[i], sizeof(struct mScriptValue));
 	}
 	return true;
 }

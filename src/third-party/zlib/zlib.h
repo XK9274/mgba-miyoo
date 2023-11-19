@@ -32,6 +32,7 @@
 #define ZLIB_H
 
 #include "zconf.h"
+#include "neon.h"
 
 #ifdef __cplusplus
 extern "C" {

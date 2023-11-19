@@ -79,11 +79,11 @@ void GBACheatSetGameSharkVersion(struct GBACheatSet* cheats, enum GBACheatGameSh
 	switch (version) {
 	case GBA_GS_GSAV1:
 	case GBA_GS_GSAV1_RAW:
-		memcpy(cheats->gsaSeeds, GBACheatGameSharkSeeds, 4 * sizeof(uint32_t));
+		neon_memcpy(cheats->gsaSeeds, GBACheatGameSharkSeeds, 4 * sizeof(uint32_t));
 		break;
 	case GBA_GS_PARV3:
 	case GBA_GS_PARV3_RAW:
-		memcpy(cheats->gsaSeeds, GBACheatProActionReplaySeeds, 4 * sizeof(uint32_t));
+		neon_memcpy(cheats->gsaSeeds, GBACheatProActionReplaySeeds, 4 * sizeof(uint32_t));
 		break;
 	default:
 		break;

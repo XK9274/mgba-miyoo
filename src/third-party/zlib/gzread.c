@@ -158,7 +158,7 @@ local int gz_look(state)
        space for gzungetc() */
     state->x.next = state->out;
     if (strm->avail_in) {
-        memcpy(state->x.next, strm->next_in, strm->avail_in);
+        neon_memcpy(state->x.next, strm->next_in, strm->avail_in);
         state->x.have = strm->avail_in;
         strm->avail_in = 0;
     }
@@ -322,7 +322,7 @@ local z_size_t gz_read(state, buf, len)
         if (state->x.have) {
             if (state->x.have < n)
                 n = state->x.have;
-            memcpy(buf, state->x.next, n);
+            neon_memcpy(buf, state->x.next, n);
             state->x.next += n;
             state->x.have -= n;
         }
@@ -586,7 +586,7 @@ char * ZEXPORT gzgets(file, buf, len)
             n = (unsigned)(eol - state->x.next) + 1;
 
         /* copy through end-of-line, or remainder if not found */
-        memcpy(buf, state->x.next, n);
+        neon_memcpy(buf, state->x.next, n);
         state->x.have -= n;
         state->x.next += n;
         state->x.pos += n;

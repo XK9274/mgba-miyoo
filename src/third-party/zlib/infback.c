@@ -344,7 +344,7 @@ void FAR *out_desc;
                 ROOM();
                 if (copy > have) copy = have;
                 if (copy > left) copy = left;
-                zmemcpy(put, next, copy);
+                z_memcpy(put, next, copy);
                 have -= copy;
                 next += copy;
                 left -= copy;

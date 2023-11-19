@@ -106,7 +106,7 @@ void AssetView::compositeTile(const void* tBuffer, void* buffer, size_t stride, 
 		break;
 	case 8:
 		for (size_t i = 0; i < 8; ++i) {
-			memcpy(&pixels[base + i * stride], &tile[i * 8], 8);
+			neon_memcpy(&pixels[base + i * stride], &tile[i * 8], 8);
 		}
 		break;
 	}
@@ -127,7 +127,7 @@ QImage AssetView::compositeMap(int map, QVector<mMapCacheEntry>* mapStatus) {
 			mMapCacheCleanTile(mapCache, mapStatus->data(), i, j);
 		}
 		for (int i = 0; i < 8; ++i) {
-			memcpy(static_cast<void*>(&bgBits[tilesW * 32 * (i + j * 8)]), mMapCacheGetRow(mapCache, i + j * 8), tilesW * 32);
+			neon_memcpy(static_cast<void*>(&bgBits[tilesW * 32 * (i + j * 8)]), mMapCacheGetRow(mapCache, i + j * 8), tilesW * 32);
 		}
 	}
 	return rawMap.rgbSwapped();

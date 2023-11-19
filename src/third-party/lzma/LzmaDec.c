@@ -948,7 +948,7 @@ SRes LzmaDec_DecodeToDic(CLzmaDec *p, SizeT dicLimit, const Byte *src, SizeT *sr
           int dummyRes = LzmaDec_TryDummy(p, src, inSize);
           if (dummyRes == DUMMY_ERROR)
           {
-            memcpy(p->tempBuf, src, inSize);
+            neon_memcpy(p->tempBuf, src, inSize);
             p->tempBufSize = (unsigned)inSize;
             (*srcLen) += inSize;
             *status = LZMA_STATUS_NEEDS_MORE_INPUT;
@@ -1048,7 +1048,7 @@ SRes LzmaDec_DecodeToBuf(CLzmaDec *p, Byte *dest, SizeT *destLen, const Byte *sr
     inSize -= inSizeCur;
     *srcLen += inSizeCur;
     outSizeCur = p->dicPos - dicPos;
-    memcpy(dest, p->dic + dicPos, outSizeCur);
+    neon_memcpy(dest, p->dic + dicPos, outSizeCur);
     dest += outSizeCur;
     outSize -= outSizeCur;
     *destLen += outSizeCur;

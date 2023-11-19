@@ -594,7 +594,7 @@ static SRes Lzma2DecMt_MtCallback_Write(void *pp, unsigned coderIndex,
   /*
   if (size > me->outBufSize)
     return SZ_ERROR_OUTPUT_EOF;
-  memcpy(me->outBuf, data, size);
+  neon_memcpy(me->outBuf, data, size);
   me->outBufSize -= size;
   me->outBuf += size;
   *needContinue = needContinue2;

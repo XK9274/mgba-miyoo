@@ -309,7 +309,7 @@ static void* _loadPNGState(struct mCore* core, struct VFile* vf, struct mStateEx
 		uint16_t dims[2] = { width, height };
 		item.size = sizeof(dims);
 		item.data = malloc(item.size);
-		memcpy(item.data, dims, item.size);
+		neon_memcpy(item.data, dims, item.size);
 		mStateExtdataPut(extdata, EXTDATA_SCREENSHOT_DIMENSIONS, &item);
 	} else {
 		free(pixels);

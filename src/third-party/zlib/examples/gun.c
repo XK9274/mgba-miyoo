@@ -59,7 +59,7 @@
 /* external functions and related types and constants */
 #include <stdio.h>          /* fprintf() */
 #include <stdlib.h>         /* malloc(), free() */
-#include <string.h>         /* strerror(), strcmp(), strlen(), memcpy() */
+#include <string.h>         /* strerror(), strcmp(), strlen(), neon_memcpy() */
 #include <errno.h>          /* errno */
 #include <fcntl.h>          /* open() */
 #include <unistd.h>         /* read(), write(), close(), chown(), unlink() */
@@ -686,7 +686,7 @@ int main(int argc, char **argv)
                     ret = 1;
                     break;
                 }
-                memcpy(outname, *argv, len);
+                neon_memcpy(outname, *argv, len);
                 outname[len] = 0;
             }
             ret = gunzip(&strm, *argv, outname, test);

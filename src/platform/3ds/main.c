@@ -621,7 +621,7 @@ static void _drawScreenshot(struct mGUIRunner* runner, const color_t* pixels, un
 	}
 	unsigned y;
 	for (y = 0; y < height; ++y) {
-		memcpy(&screenshotBuffer[y * 256], &pixels[y * width], width * sizeof(color_t));
+		neon_memcpy(&screenshotBuffer[y * 256], &pixels[y * width], width * sizeof(color_t));
 		memset(&screenshotBuffer[y * 256 + width], 0, (256 - width) * sizeof(color_t));
 	}
 

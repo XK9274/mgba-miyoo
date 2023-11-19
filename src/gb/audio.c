@@ -1000,7 +1000,7 @@ void GBAudioPSGSerialize(const struct GBAudio* audio, struct GBSerializedPSGStat
 	STORE_32LE(audio->ch2.lastUpdate - mTimingCurrentTime(audio->timing), 0, &state->ch2.lastUpdate);
 
 	flags = GBSerializedAudioFlagsSetCh3Readable(flags, audio->ch3.readable);
-	memcpy(state->ch3.wavebanks, audio->ch3.wavedata32, sizeof(state->ch3.wavebanks));
+	neon_memcpy(state->ch3.wavebanks, audio->ch3.wavedata32, sizeof(state->ch3.wavebanks));
 	STORE_16LE(audio->ch3.length, 0, &state->ch3.length);
 	STORE_32LE(audio->ch3.nextUpdate - mTimingCurrentTime(audio->timing), 0, &state->ch3.nextEvent);
 
@@ -1071,7 +1071,7 @@ void GBAudioPSGDeserialize(struct GBAudio* audio, const struct GBSerializedPSGSt
 
 	audio->ch3.readable = GBSerializedAudioFlagsGetCh3Readable(flags);
 	// TODO: Big endian?
-	memcpy(audio->ch3.wavedata32, state->ch3.wavebanks, sizeof(audio->ch3.wavedata32));
+	neon_memcpy(audio->ch3.wavedata32, state->ch3.wavebanks, sizeof(audio->ch3.wavedata32));
 	LOAD_16LE(audio->ch3.length, 0, &state->ch3.length);
 	LOAD_32LE(audio->ch3.nextUpdate, 0, &state->ch3.nextEvent);
 	audio->ch3.nextUpdate += mTimingCurrentTime(audio->timing);

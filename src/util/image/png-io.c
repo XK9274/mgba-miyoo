@@ -443,7 +443,7 @@ bool PNGWritePixels(png_structp png, unsigned width, unsigned height, unsigned s
 			break;
 		case mCOLOR_L8:
 		case mCOLOR_PAL8:
-			memcpy(row, pixelRow, width);
+			neon_memcpy(row, pixelRow, width);
 			break;
 		case mCOLOR_ANY:
 			// Invalid value

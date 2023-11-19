@@ -571,7 +571,7 @@ static size_t _parseExpression(struct ParseTree* tree, struct LexVector* lv, int
 			newPrecedence = _operatorPrecedence[token->operatorValue];
 			if (newPrecedence < precedence) {
 				newTree = parseTreeCreate();
-				memcpy(newTree, tree, sizeof(*tree));
+				neon_memcpy(newTree, tree, sizeof(*tree));
 				if (newTree->lhs) {
 					newTree->lhs->p = newTree;
 				}

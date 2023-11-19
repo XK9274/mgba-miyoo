@@ -189,12 +189,12 @@ void Sha256_Update(CSha256 *p, const Byte *data, size_t size)
     num = 64 - pos;
     if (num > size)
     {
-      memcpy(p->buffer + pos, data, size);
+      neon_memcpy(p->buffer + pos, data, size);
       return;
     }
     
     size -= num;
-    memcpy(p->buffer + pos, data, num);
+    neon_memcpy(p->buffer + pos, data, num);
     data += num;
   }
 
@@ -204,12 +204,12 @@ void Sha256_Update(CSha256 *p, const Byte *data, size_t size)
     if (size < 64)
       break;
     size -= 64;
-    memcpy(p->buffer, data, 64);
+    neon_memcpy(p->buffer, data, 64);
     data += 64;
   }
 
   if (size != 0)
-    memcpy(p->buffer, data, size);
+    neon_memcpy(p->buffer, data, size);
 }
 
 void Sha256_Final(CSha256 *p, Byte *digest)

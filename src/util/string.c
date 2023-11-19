@@ -248,7 +248,7 @@ char* utf16to8(const uint16_t* utf16, size_t length) {
 		size_t bytes = toUtf8(unichar, buffer);
 		utf8Length += bytes;
 		if (utf8Length < utf8TotalBytes) {
-			memcpy(offset, buffer, bytes);
+			neon_memcpy(offset, buffer, bytes);
 			offset += bytes;
 		} else if (!utf8) {
 			utf8 = malloc(length);
@@ -256,7 +256,7 @@ char* utf16to8(const uint16_t* utf16, size_t length) {
 				return 0;
 			}
 			utf8TotalBytes = length;
-			memcpy(utf8, buffer, bytes);
+			neon_memcpy(utf8, buffer, bytes);
 			offset = utf8 + bytes;
 		} else if (utf8Length >= utf8TotalBytes) {
 			ptrdiff_t o = offset - utf8;
@@ -267,7 +267,7 @@ char* utf16to8(const uint16_t* utf16, size_t length) {
 				return 0;
 			}
 			utf8 = newUTF8;
-			memcpy(offset, buffer, bytes);
+			neon_memcpy(offset, buffer, bytes);
 			offset += bytes;
 		}
 	}
@@ -301,10 +301,10 @@ char* latin1ToUtf8(const char* latin1, size_t length) {
 				return NULL;
 			}
 			utf8TotalBytes = length;
-			memcpy(utf8, buffer, bytes);
+			neon_memcpy(utf8, buffer, bytes);
 			utf8Offset = utf8 + bytes;
 		} else if (utf8Length < utf8TotalBytes) {
-			memcpy(utf8Offset, buffer, bytes);
+			neon_memcpy(utf8Offset, buffer, bytes);
 			utf8Offset += bytes;
 		} else if (utf8Length >= utf8TotalBytes) {
 			ptrdiff_t o = utf8Offset - utf8;
@@ -315,7 +315,7 @@ char* latin1ToUtf8(const char* latin1, size_t length) {
 				return 0;
 			}
 			utf8 = newUTF8;
-			memcpy(utf8Offset, buffer, bytes);
+			neon_memcpy(utf8Offset, buffer, bytes);
 			utf8Offset += bytes;
 		}
 	}
@@ -370,10 +370,10 @@ char* gbkToUtf8(const char* gbk, size_t length) {
 				return NULL;
 			}
 			utf8TotalBytes = length;
-			memcpy(utf8, buffer, bytes);
+			neon_memcpy(utf8, buffer, bytes);
 			utf8Offset = utf8 + bytes;
 		} else if (utf8Length < utf8TotalBytes) {
-			memcpy(utf8Offset, buffer, bytes);
+			neon_memcpy(utf8Offset, buffer, bytes);
 			utf8Offset += bytes;
 		} else if (utf8Length >= utf8TotalBytes) {
 			ptrdiff_t o = utf8Offset - utf8;
@@ -384,7 +384,7 @@ char* gbkToUtf8(const char* gbk, size_t length) {
 				return 0;
 			}
 			utf8 = newUTF8;
-			memcpy(utf8Offset, buffer, bytes);
+			neon_memcpy(utf8Offset, buffer, bytes);
 			utf8Offset += bytes;
 		}
 	}

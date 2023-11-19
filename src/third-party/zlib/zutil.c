@@ -146,7 +146,7 @@ const char * ZEXPORT zError(err)
 
 #ifndef HAVE_MEMCPY
 
-void ZLIB_INTERNAL zmemcpy(dest, source, len)
+void ZLIB_INTERNAL z_memcpy(dest, source, len)
     Bytef* dest;
     const Bytef* source;
     uInt  len;

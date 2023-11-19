@@ -51,7 +51,7 @@ struct mStackFrame* mStackTracePush(struct mStackTrace* stack, uint32_t pc, uint
 	frame->finished = false;
 	frame->breakWhenFinished = false;
 	frame->interrupt = false;
-	memcpy(frame->regs, regs, stack->registersSize);
+	neon_memcpy(frame->regs, regs, stack->registersSize);
 	return frame;
 }
 

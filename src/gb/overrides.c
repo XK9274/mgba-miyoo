@@ -756,7 +756,7 @@ bool GBOverrideColorFind(struct GBCartridgeOverride* override, enum GBColorLooku
 	if (order & GB_COLORS_SGB) {
 		for (i = 0; _gbcOverrides[i].headerCrc32; ++i) {
 			if (override->headerCrc32 == _sgbOverrides[i].headerCrc32) {
-				memcpy(override->gbColors, _sgbOverrides[i].gbColors, sizeof(override->gbColors));
+				neon_memcpy(override->gbColors, _sgbOverrides[i].gbColors, sizeof(override->gbColors));
 				return true;
 			}
 		}
@@ -764,7 +764,7 @@ bool GBOverrideColorFind(struct GBCartridgeOverride* override, enum GBColorLooku
 	if (order & GB_COLORS_CGB) {
 		for (i = 0; _gbcOverrides[i].headerCrc32; ++i) {
 			if (override->headerCrc32 == _gbcOverrides[i].headerCrc32) {
-				memcpy(override->gbColors, _gbcOverrides[i].gbColors, sizeof(override->gbColors));
+				neon_memcpy(override->gbColors, _gbcOverrides[i].gbColors, sizeof(override->gbColors));
 				return true;
 			}
 		}

@@ -185,11 +185,11 @@ void GBACartEReaderInit(struct GBACartEReader* ereader) {
 
 	if (ereader->p->memory.savedata.data[0xD000] == 0xFF) {
 		memset(&ereader->p->memory.savedata.data[0xD000], 0, 0x1000);
-		memcpy(&ereader->p->memory.savedata.data[0xD000], EREADER_CALIBRATION_TEMPLATE, sizeof(EREADER_CALIBRATION_TEMPLATE));
+		neon_memcpy(&ereader->p->memory.savedata.data[0xD000], EREADER_CALIBRATION_TEMPLATE, sizeof(EREADER_CALIBRATION_TEMPLATE));
 	}
 	if (ereader->p->memory.savedata.data[0xE000] == 0xFF) {
 		memset(&ereader->p->memory.savedata.data[0xE000], 0, 0x1000);
-		memcpy(&ereader->p->memory.savedata.data[0xE000], EREADER_CALIBRATION_TEMPLATE, sizeof(EREADER_CALIBRATION_TEMPLATE));
+		neon_memcpy(&ereader->p->memory.savedata.data[0xE000], EREADER_CALIBRATION_TEMPLATE, sizeof(EREADER_CALIBRATION_TEMPLATE));
 	}
 }
 
@@ -380,7 +380,7 @@ void GBACartEReaderScan(struct GBACartEReader* ereader, const void* data, size_t
 	switch (size) {
 	// Raw sizes
 	case 2076:
-		memcpy(block0, DUMMY_HEADER_STRIP[1], sizeof(DUMMY_HEADER_STRIP[1]));
+		neon_memcpy(block0, DUMMY_HEADER_STRIP[1], sizeof(DUMMY_HEADER_STRIP[1]));
 		reducedHeader = true;
 		// Fallthrough
 	case 2112:
@@ -391,7 +391,7 @@ void GBACartEReaderScan(struct GBACartEReader* ereader, const void* data, size_t
 		blocks = 28;
 		break;
 	case 1308:
-		memcpy(block0, DUMMY_HEADER_STRIP[0], sizeof(DUMMY_HEADER_STRIP[0]));
+		neon_memcpy(block0, DUMMY_HEADER_STRIP[0], sizeof(DUMMY_HEADER_STRIP[0]));
 		reducedHeader = true;
 		// Fallthrough
 	case 1344:
@@ -447,7 +447,7 @@ void GBACartEReaderScan(struct GBACartEReader* ereader, const void* data, size_t
 	}
 	if (parsed) {
 		if (reducedHeader) {
-			memcpy(&block0[0x10], DUMMY_HEADER_FIXED, sizeof(DUMMY_HEADER_FIXED));
+			neon_memcpy(&block0[0x10], DUMMY_HEADER_FIXED, sizeof(DUMMY_HEADER_FIXED));
 			block0[0x0D] = cdata[0x0];
 			block0[0x0C] = cdata[0x1];
 			block0[0x10] = cdata[0x2];
@@ -552,15 +552,15 @@ void GBACartEReaderScan(struct GBACartEReader* ereader, const void* data, size_t
 		b = 0;
 		int y;
 		for (y = 0; y < 3; ++y) {
-			memcpy(&origin[EREADER_DOTCODE_STRIDE * (4 + y) + 7], &block[b], 26);
+			neon_memcpy(&origin[EREADER_DOTCODE_STRIDE * (4 + y) + 7], &block[b], 26);
 			b += 26;
 		}
 		for (y = 0; y < 26; ++y) {
-			memcpy(&origin[EREADER_DOTCODE_STRIDE * (7 + y) + 3], &block[b], 34);
+			neon_memcpy(&origin[EREADER_DOTCODE_STRIDE * (7 + y) + 3], &block[b], 34);
 			b += 34;
 		}
 		for (y = 0; y < 3; ++y) {
-			memcpy(&origin[EREADER_DOTCODE_STRIDE * (33 + y) + 7], &block[b], 26);
+			neon_memcpy(&origin[EREADER_DOTCODE_STRIDE * (33 + y) + 7], &block[b], 26);
 			b += 26;
 		}
 	}
@@ -748,7 +748,7 @@ void GBACartEReaderQueueCard(struct GBA* gba, const void* data, size_t size) {
 			continue;
 		}
 		ereader->cards[i].data = malloc(size);
-		memcpy(ereader->cards[i].data, data, size);
+		neon_memcpy(ereader->cards[i].data, data, size);
 		ereader->cards[i].size = size;
 		return;
 	}
@@ -991,7 +991,7 @@ struct EReaderScan* EReaderScanLoadImage8(const void* pixels, unsigned width, un
 	for (y = 0; y < height; ++y) {
 		const uint8_t* row = pixels;
 		row = &row[y * stride];
-		memcpy(&scan->srcBuffer[y * width], row, width);
+		neon_memcpy(&scan->srcBuffer[y * width], row, width);
 	}
 	_eReaderScanDownsample(scan);
 	return scan;

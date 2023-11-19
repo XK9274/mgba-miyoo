@@ -839,7 +839,7 @@ png_write_row(png_structrp png_ptr, png_const_bytep row)
    png_debug1(3, "row_info->rowbytes = %lu", (unsigned long)row_info.rowbytes);
 
    /* Copy user's row into buffer, leaving room for filter byte. */
-   memcpy(png_ptr->row_buf + 1, row, row_info.rowbytes);
+   neon_memcpy(png_ptr->row_buf + 1, row, row_info.rowbytes);
 
 #ifdef PNG_WRITE_INTERLACING_SUPPORTED
    /* Handle interlacing */
@@ -2175,7 +2175,7 @@ image_memory_write)(png_structp png_ptr, png_bytep/*const*/ data, size_t size)
       if (size > 0)
       {
          if (display->memory_bytes >= ob+size) /* writing */
-            memcpy(display->memory+ob, data, size);
+            neon_memcpy(display->memory+ob, data, size);
 
          /* Always update the size: */
          display->output_bytes = ob+size;

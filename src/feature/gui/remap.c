@@ -16,7 +16,7 @@ void mGUIRemapKeys(struct GUIParams* params, struct mInputMap* map, const struct
 	};
 	GUIMenuItemListInit(&menu.items, 0);
 	const char* keyNames[keys->nKeys + 1];
-	memcpy(&keyNames[1], keys->keyNames, keys->nKeys * sizeof(keyNames[0]));
+	neon_memcpy(&keyNames[1], keys->keyNames, keys->nKeys * sizeof(keyNames[0]));
 	keyNames[0] = "Unmapped";
 	size_t i;
 	*GUIMenuItemListAppend(&menu.items) = (struct GUIMenuItem) {

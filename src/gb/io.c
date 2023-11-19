@@ -679,12 +679,12 @@ void GBTestKeypadIRQ(struct GB* gb) {
 
 struct GBSerializedState;
 void GBIOSerialize(const struct GB* gb, struct GBSerializedState* state) {
-	memcpy(state->io, gb->memory.io, GB_SIZE_IO);
+	neon_memcpy(state->io, gb->memory.io, GB_SIZE_IO);
 	state->ie = gb->memory.ie;
 }
 
 void GBIODeserialize(struct GB* gb, const struct GBSerializedState* state) {
-	memcpy(gb->memory.io, state->io, GB_SIZE_IO);
+	neon_memcpy(gb->memory.io, state->io, GB_SIZE_IO);
 	gb->memory.ie = state->ie;
 
 	gb->audio.enable = GBAudioEnableGetEnable(*gb->audio.nr52);

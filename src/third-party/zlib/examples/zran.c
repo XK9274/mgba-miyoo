@@ -122,9 +122,9 @@ static struct deflate_index *addpoint(struct deflate_index *index, int bits,
     next->in = in;
     next->out = out;
     if (left)
-        memcpy(next->window, window + WINSIZE - left, left);
+        neon_memcpy(next->window, window + WINSIZE - left, left);
     if (left < WINSIZE)
-        memcpy(next->window + left, window, WINSIZE - left);
+        neon_memcpy(next->window + left, window, WINSIZE - left);
     index->have++;
 
     /* return list, possibly reallocated */

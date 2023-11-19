@@ -7,6 +7,7 @@
 #define VFS_H
 
 #include <mgba-util/common.h>
+#include "neon.h"
 
 CXX_GUARD_START
 

@@ -130,7 +130,7 @@ static inline void _setAttribute(uint8_t* sgbAttributes, unsigned x, unsigned y,
 
 static void _parseAttrBlock(struct GBVideoSoftwareRenderer* renderer, int start) {
 	uint8_t block[6];
-	memcpy(block, &renderer->sgbPacket[start], 6);
+	neon_memcpy(block, &renderer->sgbPacket[start], 6);
 	unsigned x0 = block[2];
 	unsigned x1 = block[4];
 	unsigned y0 = block[3];
@@ -353,7 +353,7 @@ static uint8_t GBVideoSoftwareRendererWriteVideoRegister(struct GBVideoRenderer*
 
 static void GBVideoSoftwareRendererWriteSGBPacket(struct GBVideoRenderer* renderer, uint8_t* data) {
 	struct GBVideoSoftwareRenderer* softwareRenderer = (struct GBVideoSoftwareRenderer*) renderer;
-	memcpy(softwareRenderer->sgbPacket, data, sizeof(softwareRenderer->sgbPacket));
+	neon_memcpy(softwareRenderer->sgbPacket, data, sizeof(softwareRenderer->sgbPacket));
 	int i;
 	softwareRenderer->sgbCommandHeader = data[0];
 	softwareRenderer->sgbTransfer = 0;
@@ -375,7 +375,7 @@ static void GBVideoSoftwareRendererWriteSGBPacket(struct GBVideoRenderer* render
 	case SGB_ATTR_SET:
 		set = softwareRenderer->sgbPacket[1] & 0x3F;
 		if (set <= 0x2C) {
-			memcpy(renderer->sgbAttributes, &renderer->sgbAttributeFiles[set * 90], 90);
+			neon_memcpy(renderer->sgbAttributes, &renderer->sgbAttributeFiles[set * 90], 90);
 		}
 		break;
 	case SGB_ATTR_BLK:
@@ -596,7 +596,7 @@ static void _cleanOAM(struct GBVideoSoftwareRenderer* renderer, int y) {
 			min = min2;
 			ids2[i] = min;
 		}
-		memcpy(ids, ids2, sizeof(ids));
+		neon_memcpy(ids, ids2, sizeof(ids));
 	}
 	for (i = 0; i < o; ++i) {
 		int id = ids[i] & 0x7F;

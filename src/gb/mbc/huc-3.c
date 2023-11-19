@@ -88,11 +88,11 @@ static void _huc3Commit(struct GB* gb, struct GBHuC3State* state) {
 		switch (state->value & 0xF) {
 		case GBHUC3_CMD_LATCH:
 			_latchHuC3Rtc(gb->memory.rtc, state->registers, &gb->memory.rtcLastLatch);
-			memcpy(state->registers, &state->registers[GBHUC3_RTC_MINUTES_LO], 6);
+			neon_memcpy(state->registers, &state->registers[GBHUC3_RTC_MINUTES_LO], 6);
 			mLOG(GB_MBC, DEBUG, "HuC-3 RTC latch");
 			break;
 		case GBHUC3_CMD_SET_RTC:
-			memcpy(&state->registers[GBHUC3_RTC_MINUTES_LO], state->registers, 6);
+			neon_memcpy(&state->registers[GBHUC3_RTC_MINUTES_LO], state->registers, 6);
 			mLOG(GB_MBC, DEBUG, "HuC-3 set RTC");
 			break;
 		case GBHUC3_CMD_RO:

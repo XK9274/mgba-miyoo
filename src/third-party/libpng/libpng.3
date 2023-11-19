@@ -3207,7 +3207,7 @@ png_infop info_ptr;
        passing in the row and the old row.  You can
        call this function for NULL rows (it will just
        return) and for non-interlaced images (it just
-       does the memcpy for you) if it will make the
+       does the neon_memcpy for you) if it will make the
        code easier.  Thus, you can just do this for
        all cases if you switch on interlace handling;
      */
@@ -5274,8 +5274,8 @@ png_set_mmx_thresholds(), png_get_asm_flags(),
 png_get_mmx_bitdepth_threshold(), png_get_mmx_rowbytes_threshold(),
 png_set_asm_flags(), and png_mmx_supported()
 
-We removed the obsolete png_check_sig(), png_memcpy_check(), and
-png_memset_check() functions.  Instead use !png_sig_cmp(), memcpy(),
+We removed the obsolete png_check_sig(), png_neon_memcpy_check(), and
+png_memset_check() functions.  Instead use !png_sig_cmp(), neon_memcpy(),
 and memset(), respectively.
 
 The function png_set_gray_1_2_4_to_8() was removed. It has been
@@ -5383,7 +5383,7 @@ the '"#include png.h"' directive.
 The png_sprintf(), png_strcpy(), and png_strncpy() macros are no longer used
 and were removed.
 
-We moved the png_strlen(), png_memcpy(), png_memset(), and png_memcmp()
+We moved the png_strlen(), png_neon_memcpy(), png_memset(), and png_memcmp()
 macros into a private header file (pngpriv.h) that is not accessible to
 applications.
 
@@ -5633,7 +5633,7 @@ The following have been removed:
      with png_get_io_chunk_type().  The new
      function returns a 32-bit integer instead of
      a string.
-   The png_sizeof(), png_strlen(), png_memcpy(), png_memcmp(), and
+   The png_sizeof(), png_strlen(), png_neon_memcpy(), png_memcmp(), and
      png_memset() macros are no longer used in the libpng sources and
      have been removed.  These had already been made invisible to applications
      (i.e., defined in the private pngpriv.h header file) since libpng-1.5.0.

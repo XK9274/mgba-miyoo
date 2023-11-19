@@ -73,7 +73,7 @@ extract(FILE *fp, png_uint_32 *proflen)
       {
          result = malloc(*proflen);
          if (result != NULL)
-            memcpy(result, profile, *proflen);
+            neon_memcpy(result, profile, *proflen);
 
          else
             png_error(png_ptr, "OOM allocating profile buffer");
@@ -118,7 +118,7 @@ extract_one_file(const char *filename)
          {
             FILE *of;
 
-            memcpy(output, filename, len);
+            neon_memcpy(output, filename, len);
             strcpy(output+len, ".icc");
 
             of = fopen(output, "wb");

@@ -29,24 +29,24 @@
 
 static __m128i load4(const void* p) {
    int tmp;
-   memcpy(&tmp, p, sizeof(tmp));
+   neon_memcpy(&tmp, p, sizeof(tmp));
    return _mm_cvtsi32_si128(tmp);
 }
 
 static void store4(void* p, __m128i v) {
    int tmp = _mm_cvtsi128_si32(v);
-   memcpy(p, &tmp, sizeof(int));
+   neon_memcpy(p, &tmp, sizeof(int));
 }
 
 static __m128i load3(const void* p) {
    png_uint_32 tmp = 0;
-   memcpy(&tmp, p, 3);
+   neon_memcpy(&tmp, p, 3);
    return _mm_cvtsi32_si128(tmp);
 }
 
 static void store3(void* p, __m128i v) {
    int tmp = _mm_cvtsi128_si32(v);
-   memcpy(p, &tmp, 3);
+   neon_memcpy(p, &tmp, 3);
 }
 
 void png_read_filter_row_sub3_sse2(png_row_infop row_info, png_bytep row,

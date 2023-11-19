@@ -219,7 +219,7 @@ local z_size_t gz_write(state, buf, len)
             copy = state->size - have;
             if (copy > len)
                 copy = (unsigned)len;
-            memcpy(state->in + have, buf, copy);
+            neon_memcpy(state->in + have, buf, copy);
             state->strm.avail_in += copy;
             state->x.pos += copy;
             buf = (const char *)buf + copy;

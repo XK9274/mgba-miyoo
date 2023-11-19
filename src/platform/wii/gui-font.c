@@ -32,7 +32,7 @@ struct GUIFont* GUIFontCreate(void) {
 		free(guiFont);
 		return 0;
 	}
-	memcpy(fontTpl, font, font_size);
+	neon_memcpy(fontTpl, font, font_size);
 	TPL_OpenTPLFromMemory(&guiFont->tdf, fontTpl, font_size);
 
 	void* iconsTpl = memalign(32, icons_size);
@@ -41,7 +41,7 @@ struct GUIFont* GUIFontCreate(void) {
 		free(guiFont);
 		return 0;
 	}
-	memcpy(iconsTpl, icons, icons_size);
+	neon_memcpy(iconsTpl, icons, icons_size);
 	TPL_OpenTPLFromMemory(&guiFont->iconsTdf, iconsTpl, icons_size);
 	return guiFont;
 }

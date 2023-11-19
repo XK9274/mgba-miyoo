@@ -252,7 +252,7 @@ static void mGLES2ContextLayerDimensions(const struct VideoBackend* v, enum Vide
 	if (layer >= VIDEO_LAYER_MAX) {
 		return;
 	}
-	memcpy(dims, &context->layerDims[layer], sizeof(*dims));
+	neon_memcpy(dims, &context->layerDims[layer], sizeof(*dims));
 }
 
 static void mGLES2ContextDeinit(struct VideoBackend* v) {
@@ -1145,7 +1145,7 @@ bool mGLES2ShaderLoad(struct VideoShader* shader, struct VDir* dir) {
 				struct mGLES2Uniform* uniformBlock;
 				if (u) {
 					uniformBlock = calloc(u, sizeof(*uniformBlock));
-					memcpy(uniformBlock, mGLES2UniformListGetPointer(&uniformVector, 0), sizeof(*uniformBlock) * u);
+					neon_memcpy(uniformBlock, mGLES2UniformListGetPointer(&uniformVector, 0), sizeof(*uniformBlock) * u);
 				}
 				mGLES2UniformListDeinit(&uniformVector);
 

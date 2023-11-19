@@ -65,7 +65,7 @@ size_t RingFIFOWrite(struct RingFIFO* buffer, const void* value, size_t length) 
 		return 0;
 	}
 	if (value) {
-		memcpy(data, value, length);
+		neon_memcpy(data, value, length);
 	}
 	ATOMIC_STORE_PTR(buffer->writePtr, (void*) ((intptr_t) data + length));
 	return length;
@@ -97,7 +97,7 @@ size_t RingFIFORead(struct RingFIFO* buffer, void* output, size_t length) {
 		return 0;
 	}
 	if (output) {
-		memcpy(output, data, length);
+		neon_memcpy(output, data, length);
 	}
 	ATOMIC_STORE_PTR(buffer->readPtr, (void*) ((uintptr_t) data + length));
 	return length;

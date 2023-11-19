@@ -311,10 +311,10 @@ void GBResizeSram(struct GB* gb, size_t size) {
 		uint8_t* newSram = anonymousMemoryMap(size);
 		if (gb->memory.sram) {
 			if (size > gb->sramSize) {
-				memcpy(newSram, gb->memory.sram, gb->sramSize);
+				neon_memcpy(newSram, gb->memory.sram, gb->sramSize);
 				memset(&newSram[gb->sramSize], 0xFF, size - gb->sramSize);
 			} else {
-				memcpy(newSram, gb->memory.sram, size);
+				neon_memcpy(newSram, gb->memory.sram, size);
 			}
 			mappedMemoryFree(gb->memory.sram, gb->sramSize);
 		} else {
@@ -775,9 +775,9 @@ void GBMapBIOS(struct GB* gb) {
 	gb->memory.romBase = malloc(GB_SIZE_CART_BANK0);
 	ssize_t size = gb->biosVf->read(gb->biosVf, gb->memory.romBase, GB_SIZE_CART_BANK0);
 	if (gb->memory.rom) {
-		memcpy(&gb->memory.romBase[size], &gb->memory.rom[size], GB_SIZE_CART_BANK0 - size);
+		neon_memcpy(&gb->memory.romBase[size], &gb->memory.rom[size], GB_SIZE_CART_BANK0 - size);
 		if (size > 0x100) {
-			memcpy(&gb->memory.romBase[0x100], &gb->memory.rom[0x100], 0x100);
+			neon_memcpy(&gb->memory.romBase[0x100], &gb->memory.rom[0x100], 0x100);
 		}
 	}
 }
@@ -1079,9 +1079,9 @@ void GBGetGameTitle(const struct GB* gb, char* out) {
 		return;
 	}
 	if (cart->oldLicensee != 0x33) {
-		memcpy(out, cart->titleLong, 16);
+		neon_memcpy(out, cart->titleLong, 16);
 	} else {
-		memcpy(out, cart->titleShort, 11);
+		neon_memcpy(out, cart->titleShort, 11);
 	}
 }
 
@@ -1095,12 +1095,12 @@ void GBGetGameCode(const struct GB* gb, char* out) {
 		return;
 	}
 	if (cart->cgb == 0xC0) {
-		memcpy(out, "CGB-????", 8);
+		neon_memcpy(out, "CGB-????", 8);
 	} else {
-		memcpy(out, "DMG-????", 8);
+		neon_memcpy(out, "DMG-????", 8);
 	}
 	if (cart->oldLicensee == 0x33) {
-		memcpy(&out[4], cart->maker, 4);
+		neon_memcpy(&out[4], cart->maker, 4);
 	}
 }
 

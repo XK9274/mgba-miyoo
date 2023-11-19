@@ -88,7 +88,7 @@ void ELFGetProgramHeaders(struct ELF* elf, struct ELFProgramHeaders* ph) {
 		return;
 	}
 	ELFProgramHeadersResize(ph, hdr->e_phnum);
-	memcpy(ELFProgramHeadersGetPointer(ph, 0), phdr, sizeof(*phdr) * hdr->e_phnum);
+	neon_memcpy(ELFProgramHeadersGetPointer(ph, 0), phdr, sizeof(*phdr) * hdr->e_phnum);
 }
 
 void ELFGetSectionHeaders(struct ELF* elf, struct ELFSectionHeaders* sh) {

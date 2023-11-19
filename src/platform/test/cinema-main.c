@@ -152,7 +152,7 @@ static char* _compileStringList(struct StringList* list) {
 	for (i = 0; i < StringListSize(list); ++i) {
 		char* brick = *StringListGetPointer(list, i);
 		size_t portion = strlen(brick);
-		memcpy(cur, brick, portion);
+		neon_memcpy(cur, brick, portion);
 		free(brick);
 		cur += portion;
 	}
@@ -689,7 +689,7 @@ static void _cinemaVideoFrame(struct mAVStream* stream, const color_t* pixels, s
 	cistream->image->stride = stride;
 	size_t bufferSize = cistream->image->stride * cistream->image->height * BYTES_PER_PIXEL;
 	cistream->image->data = malloc(bufferSize);
-	memcpy(cistream->image->data, pixels, bufferSize);
+	neon_memcpy(cistream->image->data, pixels, bufferSize);
 }
 #endif
 
@@ -882,9 +882,9 @@ static void _write4UpDiff(const struct CInemaImage* expected, const struct CInem
 	for (y = 0; y < expected->height; ++y) {
 		size_t base = y * out.stride;
 		size_t inbase = y * expected->stride;
-		memcpy(&outdata[base], &((uint32_t*) expected->data)[inbase], expected->width * 4);
-		memcpy(&outdata[base + expected->width], &((uint32_t*) result->data)[y * result->stride], expected->width * 4);
-		memcpy(&outdata[base + expected->height * out.stride], &diff[inbase * 4], expected->width * 4);
+		neon_memcpy(&outdata[base], &((uint32_t*) expected->data)[inbase], expected->width * 4);
+		neon_memcpy(&outdata[base + expected->width], &((uint32_t*) result->data)[y * result->stride], expected->width * 4);
+		neon_memcpy(&outdata[base + expected->height * out.stride], &diff[inbase * 4], expected->width * 4);
 		for (x = 0; x < expected->width; ++x) {
 			size_t pix = (expected->stride * y + x) * 4;
 			size_t outpix = base + expected->height * out.stride + expected->width + x;

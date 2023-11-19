@@ -304,7 +304,7 @@ SRes Xzs_ReadBackward(CXzs *p, ILookInStream *stream, Int64 *startOffset, ICompr
         return SZ_ERROR_MEM;
       p->numAllocated = newNum;
       if (p->num != 0)
-        memcpy(data, p->streams, p->num * sizeof(CXzStream));
+        neon_memcpy(data, p->streams, p->num * sizeof(CXzStream));
       ISzAlloc_Free(alloc, p->streams);
       p->streams = (CXzStream *)data;
     }

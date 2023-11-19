@@ -471,7 +471,7 @@ private:
         const Frag src = *operandStack.template Top<Frag>(); // Copy constructor to prevent invalidation
         SizeType count = stateCount_ - src.minIndex; // Assumes top operand contains states in [src->minIndex, stateCount_)
         State* s = states_.template Push<State>(count);
-        memcpy(s, &GetState(src.minIndex), count * sizeof(State));
+        neon_memcpy(s, &GetState(src.minIndex), count * sizeof(State));
         for (SizeType j = 0; j < count; j++) {
             if (s[j].out != kRegexInvalidState)
                 s[j].out += count;

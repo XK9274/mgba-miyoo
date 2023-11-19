@@ -22,6 +22,8 @@ if(NOT LIBMGBA_ONLY)
 	set(BINARY_NAME ${BINARY_NAME} CACHE INTERNAL "Name of output binaries")
 endif()
 
+set(NEON_LIB_PATH "/root/workspace/mgba-miyoo/libneon.so")
+
 set(CMAKE_C_STANDARD 11)
 if(NOT MSVC)
 	set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -954,7 +956,7 @@ if(NOT SKIP_LIBRARY)
 
 	file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/mgba-util)
 
-	target_link_libraries(${BINARY_NAME} ${DEBUGGER_LIB} ${DEPENDENCY_LIB} ${OS_LIB})
+	target_link_libraries(${BINARY_NAME} ${DEBUGGER_LIB} ${DEPENDENCY_LIB} ${OS_LIB} ${NEON_LIB_PATH})
 	install(TARGETS ${BINARY_NAME} LIBRARY DESTINATION ${LIBDIR} COMPONENT lib${BINARY_NAME} NAMELINK_SKIP ARCHIVE DESTINATION ${LIBDIR} RUNTIME DESTINATION ${LIBDIR} COMPONENT lib${BINARY_NAME})
 	if(BUILD_SHARED)
 		install(TARGETS ${BINARY_NAME} LIBRARY DESTINATION ${LIBDIR} COMPONENT ${BINARY_NAME}-dev NAMELINK_ONLY)
@@ -997,7 +999,7 @@ if(BUILD_LIBRETRO)
 	add_library(${BINARY_NAME}_libretro SHARED ${CORE_SRC} ${RETRO_SRC})
 	add_dependencies(${BINARY_NAME}_libretro ${BINARY_NAME}-version-info)
 	set_target_properties(${BINARY_NAME}_libretro PROPERTIES PREFIX "" COMPILE_DEFINITIONS "__LIBRETRO__;COLOR_16_BIT;COLOR_5_6_5;DISABLE_THREADING;MGBA_STANDALONE;${OS_DEFINES};${FUNCTION_DEFINES};MINIMAL_CORE=2")
-	target_link_libraries(${BINARY_NAME}_libretro ${OS_LIB})
+	target_link_libraries(${BINARY_NAME}_libretro ${OS_LIB} ${NEON_LIB_PATH})
 	if(MSVC)
 		install(TARGETS ${BINARY_NAME}_libretro RUNTIME DESTINATION ${LIBRETRO_LIBDIR} COMPONENT ${BINARY_NAME}_libretro)
 	else()
@@ -1017,7 +1019,7 @@ if(BUILD_OPENEMU)
 		OUTPUT_NAME ${PROJECT_NAME}
 		COMPILE_OPTIONS "-fobjc-arc"
 		COMPILE_DEFINITIONS "DISABLE_THREADING;MGBA_STANDALONE;${OS_DEFINES};${FUNCTION_DEFINES};MINIMAL_CORE=1")
-	target_link_libraries(${BINARY_NAME}-openemu ${OS_LIB} ${FOUNDATION} ${OPENEMUBASE})
+	target_link_libraries(${BINARY_NAME}-openemu ${OS_LIB} ${FOUNDATION} ${OPENEMUBASE} ${NEON_LIB_PATH})
 	install(TARGETS ${BINARY_NAME}-openemu LIBRARY DESTINATION ${OE_LIBDIR} COMPONENT ${BINARY_NAME}.oecoreplugin NAMELINK_SKIP)
 endif()
 
@@ -1030,7 +1032,7 @@ if(BUILD_UPDATER)
 		${CMAKE_CURRENT_SOURCE_DIR}/src/core/config.c
 		${CMAKE_CURRENT_SOURCE_DIR}/src/feature/updater.c
 		${CMAKE_CURRENT_SOURCE_DIR}/src/feature/updater-main.c)
-	target_link_libraries(updater-stub ${ZLIB_LIBRARY} ${ZLIB_LIBRARY} ${ZIP_LIBRARIES} ${OS_LIB} ${PLATFORM_LIBRARY})
+	target_link_libraries(updater-stub ${ZLIB_LIBRARY} ${ZLIB_LIBRARY} ${ZIP_LIBRARIES} ${OS_LIB} ${PLATFORM_LIBRARY} ${NEON_LIB_PATH})
 	set_target_properties(updater-stub PROPERTIES COMPILE_DEFINITIONS "${OS_DEFINES};${FUNCTION_DEFINES};${FEATURE_DEFINES};BUILD_STATIC")
 	if(MSVC)
 		set_target_properties(updater-stub PROPERTIES LINK_FLAGS /ENTRY:mainCRTStartup)
@@ -1042,7 +1044,7 @@ endif()
 
 if(ENABLE_SCRIPTING AND BUILD_DOCGEN)
 	add_executable(docgen ${CMAKE_CURRENT_SOURCE_DIR}/src/script/docgen.c)
-	target_link_libraries(docgen ${OS_LIB} ${PLATFORM_LIBRARY} ${BINARY_NAME})
+	target_link_libraries(docgen ${OS_LIB} ${PLATFORM_LIBRARY} ${BINARY_NAME} ${NEON_LIB_PATH})
 endif()
 
 if(BUILD_SDL)
@@ -1063,12 +1065,12 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/platform/test ${CMAKE_CURRENT_B
 
 if(BUILD_EXAMPLE)
 	add_executable(${BINARY_NAME}-example-server ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/example/client-server/server.c)
-	target_link_libraries(${BINARY_NAME}-example-server ${BINARY_NAME})
+	target_link_libraries(${BINARY_NAME}-example-server ${BINARY_NAME} ${NEON_LIB_PATH})
 	set_target_properties(${BINARY_NAME}-example-server PROPERTIES COMPILE_DEFINITIONS "${OS_DEFINES};${FEATURE_DEFINES};${FUNCTION_DEFINES}")
 
 	if(SDL_FOUND)
 		add_executable(${BINARY_NAME}-example-client ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/example/client-server/client.c)
-		target_link_libraries(${BINARY_NAME}-example-client ${BINARY_NAME} ${SDL_LIBRARY} ${SDLMAIN_LIBRARY} ${OPENGL_LIBRARY} ${OPENGLES2_LIBRARY})
+		target_link_libraries(${BINARY_NAME}-example-client ${BINARY_NAME} ${SDL_LIBRARY} ${SDLMAIN_LIBRARY} ${OPENGL_LIBRARY} ${OPENGLES2_LIBRARY} ${NEON_LIB_PATH})
 		set_target_properties(${BINARY_NAME}-example-client PROPERTIES
 		                      COMPILE_DEFINITIONS "${OS_DEFINES};${FEATURE_DEFINES};${FUNCTION_DEFINES}"
 		                      INCLUDE_DIRECTORIES "${SDL_INCLUDE_DIR};${CMAKE_CURRENT_SOURCE_DIR}/src;${CMAKE_CURRENT_SOURCE_DIR}/include")

@@ -27,7 +27,7 @@ struct QueuedMessage {
     {
         length = other.length;
         if (length) {
-            memcpy(buffer, other.buffer, length);
+            neon_memcpy(buffer, other.buffer, length);
         }
     }
 };

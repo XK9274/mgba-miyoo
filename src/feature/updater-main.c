@@ -165,7 +165,7 @@ int main(int argc, char* argv[]) {
 						continue;
 					}
 					off_t diff = devend - devinfo - 1;
-					memcpy(devpath, &devinfo[1], diff);
+					neon_memcpy(devpath, &devinfo[1], diff);
 					break;
 				}
 				int retstat;

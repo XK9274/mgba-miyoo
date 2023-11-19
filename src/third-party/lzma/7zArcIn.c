@@ -16,7 +16,7 @@
 #define MY_ALLOC_ZE(T, p, size, alloc) { if ((size) == 0) p = NULL; else MY_ALLOC(T, p, size, alloc) }
 
 #define MY_ALLOC_AND_CPY(to, size, from, alloc) \
-  { MY_ALLOC(Byte, to, size, alloc); memcpy(to, from, size); }
+  { MY_ALLOC(Byte, to, size, alloc); neon_memcpy(to, from, size); }
 
 #define MY_ALLOC_ZE_AND_CPY(to, size, from, alloc) \
   { if ((size) == 0) to = NULL; else { MY_ALLOC_AND_CPY(to, size, from, alloc) } }

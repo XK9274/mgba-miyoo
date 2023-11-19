@@ -94,7 +94,7 @@ static void mGLContextLayerDimensions(const struct VideoBackend* v, enum VideoLa
 	if (layer >= VIDEO_LAYER_MAX) {
 		return;
 	}
-	memcpy(dims, &context->layerDims[layer], sizeof(*dims));
+	neon_memcpy(dims, &context->layerDims[layer], sizeof(*dims));
 }
 
 static void mGLContextDeinit(struct VideoBackend* v) {

@@ -365,7 +365,7 @@ png_set_pCAL(png_const_structrp png_ptr, png_inforp info_ptr,
       return;
    }
 
-   memcpy(info_ptr->pcal_purpose, purpose, length);
+   neon_memcpy(info_ptr->pcal_purpose, purpose, length);
 
    png_debug(3, "storing X0, X1, type, and nparams in info");
    info_ptr->pcal_X0 = X0;
@@ -387,7 +387,7 @@ png_set_pCAL(png_const_structrp png_ptr, png_inforp info_ptr,
       return;
    }
 
-   memcpy(info_ptr->pcal_units, units, length);
+   neon_memcpy(info_ptr->pcal_units, units, length);
 
    info_ptr->pcal_params = png_voidcast(png_charpp, png_malloc_warn(png_ptr,
        (size_t)(((unsigned int)nparams + 1) * (sizeof (png_charp)))));
@@ -417,7 +417,7 @@ png_set_pCAL(png_const_structrp png_ptr, png_inforp info_ptr,
          return;
       }
 
-      memcpy(info_ptr->pcal_params[i], params[i], length);
+      neon_memcpy(info_ptr->pcal_params[i], params[i], length);
    }
 
    info_ptr->valid |= PNG_INFO_pCAL;
@@ -467,7 +467,7 @@ png_set_sCAL_s(png_const_structrp png_ptr, png_inforp info_ptr,
       return;
    }
 
-   memcpy(info_ptr->scal_s_width, swidth, lengthw);
+   neon_memcpy(info_ptr->scal_s_width, swidth, lengthw);
 
    ++lengthh;
 
@@ -486,7 +486,7 @@ png_set_sCAL_s(png_const_structrp png_ptr, png_inforp info_ptr,
       return;
    }
 
-   memcpy(info_ptr->scal_s_height, sheight, lengthh);
+   neon_memcpy(info_ptr->scal_s_height, sheight, lengthh);
 
    info_ptr->valid |= PNG_INFO_sCAL;
    info_ptr->free_me |= PNG_FREE_SCAL;
@@ -623,7 +623,7 @@ png_set_PLTE(png_structrp png_ptr, png_inforp info_ptr,
        PNG_MAX_PALETTE_LENGTH * (sizeof (png_color))));
 
    if (num_palette > 0)
-      memcpy(png_ptr->palette, palette, (unsigned int)num_palette *
+      neon_memcpy(png_ptr->palette, palette, (unsigned int)num_palette *
           (sizeof (png_color)));
    info_ptr->palette = png_ptr->palette;
    info_ptr->num_palette = png_ptr->num_palette = (png_uint_16)num_palette;
@@ -732,7 +732,7 @@ png_set_iCCP(png_const_structrp png_ptr, png_inforp info_ptr,
       return;
    }
 
-   memcpy(new_iccp_name, name, length);
+   neon_memcpy(new_iccp_name, name, length);
    new_iccp_profile = png_voidcast(png_bytep,
        png_malloc_warn(png_ptr, proflen));
 
@@ -745,7 +745,7 @@ png_set_iCCP(png_const_structrp png_ptr, png_inforp info_ptr,
       return;
    }
 
-   memcpy(new_iccp_profile, profile, proflen);
+   neon_memcpy(new_iccp_profile, profile, proflen);
 
    png_free_data(png_ptr, info_ptr, PNG_FREE_ICCP, 0);
 
@@ -915,16 +915,16 @@ png_set_text_2(png_const_structrp png_ptr, png_inforp info_ptr,
           (key_len + lang_len + lang_key_len + text_length + 4),
           textp->key);
 
-      memcpy(textp->key, text_ptr[i].key, key_len);
+      neon_memcpy(textp->key, text_ptr[i].key, key_len);
       *(textp->key + key_len) = '\0';
 
       if (text_ptr[i].compression > 0)
       {
          textp->lang = textp->key + key_len + 1;
-         memcpy(textp->lang, text_ptr[i].lang, lang_len);
+         neon_memcpy(textp->lang, text_ptr[i].lang, lang_len);
          *(textp->lang + lang_len) = '\0';
          textp->lang_key = textp->lang + lang_len + 1;
-         memcpy(textp->lang_key, text_ptr[i].lang_key, lang_key_len);
+         neon_memcpy(textp->lang_key, text_ptr[i].lang_key, lang_key_len);
          *(textp->lang_key + lang_key_len) = '\0';
          textp->text = textp->lang_key + lang_key_len + 1;
       }
@@ -937,7 +937,7 @@ png_set_text_2(png_const_structrp png_ptr, png_inforp info_ptr,
       }
 
       if (text_length != 0)
-         memcpy(textp->text, text_ptr[i].text, text_length);
+         neon_memcpy(textp->text, text_ptr[i].text, text_length);
 
       *(textp->text + text_length) = '\0';
 
@@ -1018,7 +1018,7 @@ png_set_tRNS(png_structrp png_ptr, png_inforp info_ptr,
          /* Changed from num_trans to PNG_MAX_PALETTE_LENGTH in version 1.2.1 */
           info_ptr->trans_alpha = png_voidcast(png_bytep,
               png_malloc(png_ptr, PNG_MAX_PALETTE_LENGTH));
-          memcpy(info_ptr->trans_alpha, trans_alpha, (size_t)num_trans);
+          neon_memcpy(info_ptr->trans_alpha, trans_alpha, (size_t)num_trans);
        }
        png_ptr->trans_alpha = info_ptr->trans_alpha;
    }
@@ -1120,7 +1120,7 @@ png_set_sPLT(png_const_structrp png_ptr,
       if (np->name == NULL)
          break;
 
-      memcpy(np->name, entries->name, length);
+      neon_memcpy(np->name, entries->name, length);
 
       /* IMPORTANT: we have memory now that won't get freed if something else
        * goes wrong; this code must free it.  png_malloc_array produces no
@@ -1140,7 +1140,7 @@ png_set_sPLT(png_const_structrp png_ptr,
       /* This multiply can't overflow because png_malloc_array has already
        * checked it when doing the allocation.
        */
-      memcpy(np->entries, entries->entries,
+      neon_memcpy(np->entries, entries->entries,
           (unsigned int)entries->nentries * sizeof (png_sPLT_entry));
 
       /* Note that 'continue' skips the advance of the out pointer and out
@@ -1259,7 +1259,7 @@ png_set_unknown_chunks(png_const_structrp png_ptr,
     */
    for (; num_unknowns > 0; --num_unknowns, ++unknowns)
    {
-      memcpy(np->name, unknowns->name, (sizeof np->name));
+      neon_memcpy(np->name, unknowns->name, (sizeof np->name));
       np->name[(sizeof np->name)-1] = '\0';
       np->location = check_location(png_ptr, unknowns->location);
 
@@ -1282,7 +1282,7 @@ png_set_unknown_chunks(png_const_structrp png_ptr,
             continue;
          }
 
-         memcpy(np->data, unknowns->data, unknowns->size);
+         neon_memcpy(np->data, unknowns->data, unknowns->size);
          np->size = unknowns->size;
       }
 
@@ -1361,7 +1361,7 @@ add_one_chunk(png_bytep list, unsigned int count, png_const_bytep add, int keep)
    if (keep != PNG_HANDLE_CHUNK_AS_DEFAULT)
    {
       ++count;
-      memcpy(list, add, 4);
+      neon_memcpy(list, add, 4);
       list[4] = (png_byte)keep;
    }
 
@@ -1462,7 +1462,7 @@ png_set_keep_unknown_chunks(png_structrp png_ptr, int keep,
           5 * (num_chunks + old_num_chunks)));
 
       if (old_num_chunks > 0)
-         memcpy(new_list, png_ptr->chunk_list, 5*old_num_chunks);
+         neon_memcpy(new_list, png_ptr->chunk_list, 5*old_num_chunks);
    }
 
    else if (old_num_chunks > 0)
@@ -1495,7 +1495,7 @@ png_set_keep_unknown_chunks(png_structrp png_ptr, int keep,
          if (inlist[4])
          {
             if (outlist != inlist)
-               memcpy(outlist, inlist, 5);
+               neon_memcpy(outlist, inlist, 5);
             outlist += 5;
             ++num_chunks;
          }

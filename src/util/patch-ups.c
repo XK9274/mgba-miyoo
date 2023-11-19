@@ -78,7 +78,7 @@ bool _UPSApplyPatch(struct Patch* patch, const void* in, size_t inSize, void* ou
 	}
 
 	struct CircleBuffer buffer;
-	memcpy(out, in, inSize > outSize ? outSize : inSize);
+	neon_memcpy(out, in, inSize > outSize ? outSize : inSize);
 
 	size_t offset = 0;
 	size_t alreadyRead = 0;

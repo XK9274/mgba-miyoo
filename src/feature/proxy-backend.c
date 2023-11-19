@@ -42,7 +42,7 @@ static void _mVideoProxyBackendLayerDimensions(const struct VideoBackend* v, enu
 	};
 	union mVideoBackendCommandData out;
 	mVideoProxyBackendSubmit(proxy, &cmd, &out);
-	memcpy(dims, &out.dims, sizeof(*dims));
+	neon_memcpy(dims, &out.dims, sizeof(*dims));
 }
 
 static void _mVideoProxyBackendSwap(struct VideoBackend* v) {

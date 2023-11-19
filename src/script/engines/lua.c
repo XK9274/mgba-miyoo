@@ -1049,9 +1049,9 @@ bool _luaPopFrame(struct mScriptEngineContextLua* luaContext, struct mScriptList
 		if (ok) {
 			for (i = 0; i < (ssize_t) (mScriptListSize(frame) / 2); ++i) {
 				struct mScriptValue buffer;
-				memcpy(&buffer, mScriptListGetPointer(frame, i), sizeof(buffer));
-				memcpy(mScriptListGetPointer(frame, i), mScriptListGetPointer(frame, mScriptListSize(frame) - i - 1), sizeof(buffer));
-				memcpy(mScriptListGetPointer(frame, mScriptListSize(frame) - i - 1), &buffer, sizeof(buffer));
+				neon_memcpy(&buffer, mScriptListGetPointer(frame, i), sizeof(buffer));
+				neon_memcpy(mScriptListGetPointer(frame, i), mScriptListGetPointer(frame, mScriptListSize(frame) - i - 1), sizeof(buffer));
+				neon_memcpy(mScriptListGetPointer(frame, mScriptListSize(frame) - i - 1), &buffer, sizeof(buffer));
 			}
 		}
 	}

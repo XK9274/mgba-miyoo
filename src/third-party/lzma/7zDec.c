@@ -261,7 +261,7 @@ static SRes SzDecodeCopy(UInt64 inSize, ILookInStream *inStream, Byte *outBuffer
     RINOK(ILookInStream_Look(inStream, &inBuf, &curSize));
     if (curSize == 0)
       return SZ_ERROR_INPUT_EOF;
-    memcpy(outBuffer, inBuf, curSize);
+    neon_memcpy(outBuffer, inBuf, curSize);
     outBuffer += curSize;
     inSize -= curSize;
     RINOK(ILookInStream_Skip(inStream, curSize));

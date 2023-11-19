@@ -556,7 +556,7 @@ png_read_row(png_structrp png_ptr, png_bytep row, png_bytep dsp_row)
     * it may not be in the future, so this was changed just to copy the
     * interlaced count:
     */
-   memcpy(png_ptr->prev_row, png_ptr->row_buf, row_info.rowbytes + 1);
+   neon_memcpy(png_ptr->prev_row, png_ptr->row_buf, row_info.rowbytes + 1);
 
 #ifdef PNG_MNG_FEATURES_SUPPORTED
    if ((png_ptr->mng_features_permitted & PNG_FLAG_MNG_FILTER_64) != 0 &&
@@ -1553,7 +1553,7 @@ png_image_memory_read(png_structp png_ptr, png_bytep out, size_t need)
 
             if (memory != NULL && size >= need)
             {
-               memcpy(out, memory, need);
+               neon_memcpy(out, memory, need);
                cp->memory = memory + need;
                cp->size = size - need;
                return;

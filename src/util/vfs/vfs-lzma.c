@@ -172,7 +172,7 @@ ssize_t _vf7zRead(struct VFile* vf, void* buffer, size_t size) {
 		size = vf7z->size - vf7z->offset;
 	}
 
-	memcpy(buffer, vf7z->outBuffer + vf7z->offset + vf7z->bufferOffset, size);
+	neon_memcpy(buffer, vf7z->outBuffer + vf7z->offset + vf7z->bufferOffset, size);
 	vf7z->offset += size;
 	return size;
 }

@@ -436,7 +436,7 @@ png_push_fill_buffer(png_structp png_ptr, png_bytep buffer, size_t length)
       else
          save_size = png_ptr->save_buffer_size;
 
-      memcpy(ptr, png_ptr->save_buffer_ptr, save_size);
+      neon_memcpy(ptr, png_ptr->save_buffer_ptr, save_size);
       length -= save_size;
       ptr += save_size;
       png_ptr->buffer_size -= save_size;
@@ -453,7 +453,7 @@ png_push_fill_buffer(png_structp png_ptr, png_bytep buffer, size_t length)
       else
          save_size = png_ptr->current_buffer_size;
 
-      memcpy(ptr, png_ptr->current_buffer_ptr, save_size);
+      neon_memcpy(ptr, png_ptr->current_buffer_ptr, save_size);
       png_ptr->buffer_size -= save_size;
       png_ptr->current_buffer_size -= save_size;
       png_ptr->current_buffer_ptr += save_size;
@@ -503,7 +503,7 @@ png_push_save_buffer(png_structrp png_ptr)
       }
 
       if (old_buffer)
-         memcpy(png_ptr->save_buffer, old_buffer, png_ptr->save_buffer_size);
+         neon_memcpy(png_ptr->save_buffer, old_buffer, png_ptr->save_buffer_size);
       else if (png_ptr->save_buffer_size)
          png_error(png_ptr, "save_buffer error");
       png_free(png_ptr, old_buffer);
@@ -511,7 +511,7 @@ png_push_save_buffer(png_structrp png_ptr)
    }
    if (png_ptr->current_buffer_size)
    {
-      memcpy(png_ptr->save_buffer + png_ptr->save_buffer_size,
+      neon_memcpy(png_ptr->save_buffer + png_ptr->save_buffer_size,
          png_ptr->current_buffer_ptr, png_ptr->current_buffer_size);
       png_ptr->save_buffer_size += png_ptr->current_buffer_size;
       png_ptr->current_buffer_size = 0;
@@ -762,7 +762,7 @@ png_push_process_row(png_structrp png_ptr)
     * it may not be in the future, so this was changed just to copy the
     * interlaced row count:
     */
-   memcpy(png_ptr->prev_row, png_ptr->row_buf, row_info.rowbytes + 1);
+   neon_memcpy(png_ptr->prev_row, png_ptr->row_buf, row_info.rowbytes + 1);
 
 #ifdef PNG_READ_TRANSFORMS_SUPPORTED
    if (png_ptr->transformations != 0)

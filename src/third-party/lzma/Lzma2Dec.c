@@ -162,7 +162,7 @@ static ELzma2State Lzma2Dec_UpdateState(CLzma2Dec *p, Byte b)
 
 static void LzmaDec_UpdateWithUncompressed(CLzmaDec *p, const Byte *src, SizeT size)
 {
-  memcpy(p->dic + p->dicPos, src, size);
+  neon_memcpy(p->dic + p->dicPos, src, size);
   p->dicPos += size;
   if (p->checkDicSize == 0 && p->prop.dicSize - p->processedPos <= size)
     p->checkDicSize = p->prop.dicSize;
@@ -453,7 +453,7 @@ SRes Lzma2Dec_DecodeToBuf(CLzma2Dec *p, Byte *dest, SizeT *destLen, const Byte *
     inSize -= inCur;
     *srcLen += inCur;
     outCur = p->decoder.dicPos - dicPos;
-    memcpy(dest, p->decoder.dic + dicPos, outCur);
+    neon_memcpy(dest, p->decoder.dic + dicPos, outCur);
     dest += outCur;
     outSize -= outCur;
     *destLen += outCur;

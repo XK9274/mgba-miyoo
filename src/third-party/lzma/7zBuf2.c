@@ -31,13 +31,13 @@ int DynBuf_Write(CDynBuf *p, const Byte *buf, size_t size, ISzAllocPtr alloc)
       return 0;
     p->size = newSize;
     if (p->pos != 0)
-      memcpy(data, p->data, p->pos);
+      neon_memcpy(data, p->data, p->pos);
     ISzAlloc_Free(alloc, p->data);
     p->data = data;
   }
   if (size != 0)
   {
-    memcpy(p->data + p->pos, buf, size);
+    neon_memcpy(p->data + p->pos, buf, size);
     p->pos += size;
   }
   return 1;

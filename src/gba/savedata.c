@@ -595,7 +595,7 @@ void GBASavedataRTCWrite(struct GBASavedata* savedata) {
 
 	struct GBASavedataRTCBuffer buffer;
 
-	memcpy(&buffer.time, savedata->gpio->rtc.time, 7);
+	neon_memcpy(&buffer.time, savedata->gpio->rtc.time, 7);
 	buffer.control = savedata->gpio->rtc.control;
 	STORE_64LE(savedata->gpio->rtc.lastLatch, 0, &buffer.lastLatch);
 
@@ -631,7 +631,7 @@ void GBASavedataRTCRead(struct GBASavedata* savedata) {
 		return;
 	}
 
-	memcpy(savedata->gpio->rtc.time, &buffer.time, 7);
+	neon_memcpy(savedata->gpio->rtc.time, &buffer.time, 7);
 
 	// Older FlashGBX sets this to 0x01 instead of the control flag.
 	// Since that bit is invalid on hardware, we can check for != 0x01

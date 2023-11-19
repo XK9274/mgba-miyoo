@@ -123,7 +123,7 @@ static bool _GBCoreInit(struct mCore* core) {
 #ifndef MINIMAL_CORE
 	gbcore->logContext = NULL;
 #endif
-	memcpy(gbcore->memoryBlocks, _GBMemoryBlocks, sizeof(_GBMemoryBlocks));
+	neon_memcpy(gbcore->memoryBlocks, _GBMemoryBlocks, sizeof(_GBMemoryBlocks));
 
 	GBCreate(gb);
 	memset(gbcore->components, 0, sizeof(gbcore->components));
@@ -519,7 +519,7 @@ static void _GBCoreChecksum(const struct mCore* core, void* data, enum mCoreChec
 	const struct GB* gb = (const struct GB*) core->board;
 	switch (type) {
 	case mCHECKSUM_CRC32:
-		memcpy(data, &gb->romCrc32, sizeof(gb->romCrc32));
+		neon_memcpy(data, &gb->romCrc32, sizeof(gb->romCrc32));
 		break;
 	}
 	return;
@@ -667,9 +667,9 @@ static void _GBCoreReset(struct mCore* core) {
 #endif
 
 	if (gb->model < GB_MODEL_CGB) {
-		memcpy(gbcore->memoryBlocks, _GBMemoryBlocks, sizeof(_GBMemoryBlocks));
+		neon_memcpy(gbcore->memoryBlocks, _GBMemoryBlocks, sizeof(_GBMemoryBlocks));
 	} else {
-		memcpy(gbcore->memoryBlocks, _GBCMemoryBlocks, sizeof(_GBCMemoryBlocks));
+		neon_memcpy(gbcore->memoryBlocks, _GBCMemoryBlocks, sizeof(_GBCMemoryBlocks));
 	}
 
 	size_t i;
@@ -1144,7 +1144,7 @@ static size_t _GBCoreSavedataClone(struct mCore* core, void** sram) {
 	}
 	if (gb->sramSize) {
 		*sram = malloc(gb->sramSize);
-		memcpy(*sram, gb->memory.sram, gb->sramSize);
+		neon_memcpy(*sram, gb->memory.sram, gb->sramSize);
 		return gb->sramSize;
 	}
 	*sram = NULL;
@@ -1167,7 +1167,7 @@ static bool _GBCoreSavedataRestore(struct mCore* core, const void* sram, size_t 
 		size = 0x20000;
 	}
 	GBResizeSram(gb, size);
-	memcpy(gb->memory.sram, sram, size);
+	neon_memcpy(gb->memory.sram, sram, size);
 	return true;
 }
 

@@ -78,8 +78,8 @@ static void _init(struct GBVideoProxyRenderer* proxyRenderer) {
 }
 
 static void _reset(struct GBVideoProxyRenderer* proxyRenderer) {
-	memcpy(proxyRenderer->logger->oam, &proxyRenderer->d.oam->raw, GB_SIZE_OAM);
-	memcpy(proxyRenderer->logger->vram, proxyRenderer->d.vram, GB_SIZE_VRAM);
+	neon_memcpy(proxyRenderer->logger->oam, &proxyRenderer->d.oam->raw, GB_SIZE_OAM);
+	neon_memcpy(proxyRenderer->logger->vram, proxyRenderer->d.vram, GB_SIZE_VRAM);
 
 	mVideoLoggerRendererReset(proxyRenderer->logger);
 }
@@ -90,7 +90,7 @@ static void _copyExtraState(struct GBVideoProxyRenderer* proxyRenderer) {
 	proxyRenderer->backend->disableOBJ = proxyRenderer->d.disableOBJ;
 	proxyRenderer->backend->highlightBG = proxyRenderer->d.highlightBG;
 	proxyRenderer->backend->highlightWIN = proxyRenderer->d.highlightWIN;
-	memcpy(proxyRenderer->backend->highlightOBJ, proxyRenderer->d.highlightOBJ, sizeof(proxyRenderer->backend->highlightOBJ));
+	neon_memcpy(proxyRenderer->backend->highlightOBJ, proxyRenderer->d.highlightOBJ, sizeof(proxyRenderer->backend->highlightOBJ));
 	proxyRenderer->backend->highlightAmount = proxyRenderer->d.highlightAmount;
 	proxyRenderer->backend->highlightColor = proxyRenderer->d.highlightColor;
 }

@@ -713,8 +713,8 @@ void GBPatch8(struct SM83Core* cpu, uint16_t address, int8_t value, int8_t* old,
 
 void GBMemorySerialize(const struct GB* gb, struct GBSerializedState* state) {
 	const struct GBMemory* memory = &gb->memory;
-	memcpy(state->wram, memory->wram, GB_SIZE_WORKING_RAM);
-	memcpy(state->hram, memory->hram, GB_SIZE_HRAM);
+	neon_memcpy(state->wram, memory->wram, GB_SIZE_WORKING_RAM);
+	neon_memcpy(state->hram, memory->hram, GB_SIZE_HRAM);
 	STORE_16LE(memory->currentBank, 0, &state->memory.currentBank);
 	state->memory.wramCurrentBank = memory->wramCurrentBank;
 	state->memory.sramCurrentBank = memory->sramCurrentBank;
@@ -727,7 +727,7 @@ void GBMemorySerialize(const struct GB* gb, struct GBSerializedState* state) {
 
 	STORE_16LE(memory->hdmaRemaining, 0, &state->memory.hdmaRemaining);
 	state->memory.dmaRemaining = memory->dmaRemaining;
-	memcpy(state->memory.rtcRegs, memory->rtcRegs, sizeof(state->memory.rtcRegs));
+	neon_memcpy(state->memory.rtcRegs, memory->rtcRegs, sizeof(state->memory.rtcRegs));
 
 	STORE_32LE(memory->dmaEvent.when - mTimingCurrentTime(&gb->timing), 0, &state->memory.dmaNext);
 	STORE_32LE(memory->hdmaEvent.when - mTimingCurrentTime(&gb->timing), 0, &state->memory.hdmaNext);
@@ -801,7 +801,7 @@ void GBMemorySerialize(const struct GB* gb, struct GBSerializedState* state) {
 		break;
 	case GB_POCKETCAM:
 		state->memory.pocketCam.registersActive = memory->mbcState.pocketCam.registersActive;
-		memcpy(state->pocketCamRegisters, memory->mbcState.pocketCam.registers, sizeof(memory->mbcState.pocketCam.registers));
+		neon_memcpy(state->pocketCamRegisters, memory->mbcState.pocketCam.registers, sizeof(memory->mbcState.pocketCam.registers));
 		break;
 	case GB_MMM01:
 		state->memory.mmm01.locked = memory->mbcState.mmm01.locked;
@@ -839,8 +839,8 @@ void GBMemorySerialize(const struct GB* gb, struct GBSerializedState* state) {
 
 void GBMemoryDeserialize(struct GB* gb, const struct GBSerializedState* state) {
 	struct GBMemory* memory = &gb->memory;
-	memcpy(memory->wram, state->wram, GB_SIZE_WORKING_RAM);
-	memcpy(memory->hram, state->hram, GB_SIZE_HRAM);
+	neon_memcpy(memory->wram, state->wram, GB_SIZE_WORKING_RAM);
+	neon_memcpy(memory->hram, state->hram, GB_SIZE_HRAM);
 	LOAD_16LE(memory->currentBank, 0, &state->memory.currentBank);
 	memory->wramCurrentBank = state->memory.wramCurrentBank;
 	memory->sramCurrentBank = state->memory.sramCurrentBank;
@@ -859,7 +859,7 @@ void GBMemoryDeserialize(struct GB* gb, const struct GBSerializedState* state) {
 
 	LOAD_16LE(memory->hdmaRemaining, 0, &state->memory.hdmaRemaining);
 	memory->dmaRemaining = state->memory.dmaRemaining;
-	memcpy(memory->rtcRegs, state->memory.rtcRegs, sizeof(state->memory.rtcRegs));
+	neon_memcpy(memory->rtcRegs, state->memory.rtcRegs, sizeof(state->memory.rtcRegs));
 
 	uint32_t when;
 	LOAD_32LE(when, 0, &state->memory.dmaNext);
@@ -956,7 +956,7 @@ void GBMemoryDeserialize(struct GB* gb, const struct GBSerializedState* state) {
 		break;
 	case GB_POCKETCAM:
 		memory->mbcState.pocketCam.registersActive = state->memory.pocketCam.registersActive;
-		memcpy(memory->mbcState.pocketCam.registers, state->pocketCamRegisters, sizeof(memory->mbcState.pocketCam.registers));
+		neon_memcpy(memory->mbcState.pocketCam.registers, state->pocketCamRegisters, sizeof(memory->mbcState.pocketCam.registers));
 		break;
 	case GB_MMM01:
 		memory->mbcState.mmm01.locked = state->memory.mmm01.locked;
@@ -1010,7 +1010,7 @@ void _pristineCow(struct GB* gb) {
 		return;
 	}
 	void* newRom = anonymousMemoryMap(GB_SIZE_CART_MAX);
-	memcpy(newRom, gb->memory.rom, gb->memory.romSize);
+	neon_memcpy(newRom, gb->memory.rom, gb->memory.romSize);
 	memset(((uint8_t*) newRom) + gb->memory.romSize, 0xFF, GB_SIZE_CART_MAX - gb->memory.romSize);
 	if (gb->memory.rom == gb->memory.romBase) {
 		gb->memory.romBase = newRom;

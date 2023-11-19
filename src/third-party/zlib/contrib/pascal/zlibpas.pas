@@ -268,7 +268,7 @@ begin
   FillChar(P^, count, B);
 end;
 
-procedure _memcpy(dest, source: Pointer; count: Integer); cdecl;
+procedure _neon_memcpy(dest, source: Pointer; count: Integer); cdecl;
 begin
   Move(source^, dest^, count);
 end;

@@ -193,7 +193,7 @@ static void SM83DebuggerListBreakpoints(struct mDebuggerPlatform* d, struct mDeb
 			if (TableLookup(&debugger->d.p->pointOwner, point->id) != owner) {
 				continue;
 			}
-			memcpy(mBreakpointListAppend(list), point, sizeof(*point));
+			neon_memcpy(mBreakpointListAppend(list), point, sizeof(*point));
 		}
 	} else {
 		mBreakpointListCopy(list, &debugger->breakpoints);
@@ -210,7 +210,7 @@ static void SM83DebuggerListWatchpoints(struct mDebuggerPlatform* d, struct mDeb
 			if (TableLookup(&debugger->d.p->pointOwner, point->id) != owner) {
 				continue;
 			}
-			memcpy(mWatchpointListAppend(list), point, sizeof(*point));
+			neon_memcpy(mWatchpointListAppend(list), point, sizeof(*point));
 		}
 	} else {
 		mWatchpointListCopy(list, &debugger->watchpoints);

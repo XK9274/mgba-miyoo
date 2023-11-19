@@ -27,7 +27,7 @@ void GBAOverride::identify(const struct mCore* core) {
 	}
 	char gameId[8];
 	core->getGameCode(core, gameId);
-	memcpy(override.id, &gameId[4], 4);
+	neon_memcpy(override.id, &gameId[4], 4);
 }
 
 void GBAOverride::save(struct Configuration* config) const {

@@ -58,7 +58,7 @@ static void _rtcGenericSerialize(struct mRTCSource* source, struct mStateExtdata
 		data = malloc(item->size + sizeof(state));
 		uint8_t* oldData = data;
 		oldData += sizeof(state);
-		memcpy(oldData, item->data, item->size);
+		neon_memcpy(oldData, item->data, item->size);
 		item->size += sizeof(state);
 		if (item->clean) {
 			item->clean(item->data);
@@ -67,7 +67,7 @@ static void _rtcGenericSerialize(struct mRTCSource* source, struct mStateExtdata
 		item->size = sizeof(state);
 		data = malloc(item->size);
 	}
-	memcpy(data, &state, sizeof(state));
+	neon_memcpy(data, &state, sizeof(state));
 	item->data = data;
 	item->clean = free;
 }

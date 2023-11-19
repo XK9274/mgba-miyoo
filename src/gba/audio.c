@@ -472,8 +472,8 @@ void GBAAudioSerialize(const struct GBAAudio* audio, struct GBASerializedState* 
 
 	STORE_32(audio->chA.internalSample, 0, &state->audio.internalA);
 	STORE_32(audio->chB.internalSample, 0, &state->audio.internalB);
-	memcpy(state->samples.chA, audio->chA.samples, sizeof(audio->chA.samples));
-	memcpy(state->samples.chB, audio->chB.samples, sizeof(audio->chB.samples));
+	neon_memcpy(state->samples.chA, audio->chA.samples, sizeof(audio->chA.samples));
+	neon_memcpy(state->samples.chB, audio->chB.samples, sizeof(audio->chB.samples));
 
 	size_t i;
 	for (i = 0; i < GBA_MAX_SAMPLES; ++i) {
@@ -540,8 +540,8 @@ void GBAAudioDeserialize(struct GBAAudio* audio, const struct GBASerializedState
 
 	LOAD_32(audio->chA.internalSample, 0, &state->audio.internalA);
 	LOAD_32(audio->chB.internalSample, 0, &state->audio.internalB);
-	memcpy(audio->chA.samples, state->samples.chA, sizeof(audio->chA.samples));
-	memcpy(audio->chB.samples, state->samples.chB, sizeof(audio->chB.samples));
+	neon_memcpy(audio->chA.samples, state->samples.chA, sizeof(audio->chA.samples));
+	neon_memcpy(audio->chB.samples, state->samples.chB, sizeof(audio->chB.samples));
 
 	size_t i;
 	for (i = 0; i < GBA_MAX_SAMPLES; ++i) {

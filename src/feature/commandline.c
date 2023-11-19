@@ -81,7 +81,7 @@ bool mArgumentsParse(struct mArguments* args, int argc, char* const* argv, struc
 	;
 
 	struct option longOptions[128] = {0};
-	memcpy(longOptions, _options, sizeof(_options));
+	neon_memcpy(longOptions, _options, sizeof(_options));
 
 	memset(args, 0, sizeof(*args));
 	args->frameskip = -1;

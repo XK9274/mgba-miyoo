@@ -120,7 +120,7 @@ void SfoInit(struct Table* sfo) {
 	size_t i;
 	for (i = 0; i < sizeof(sfoDefaults) / sizeof(sfoDefaults[0]); ++i) {
 		struct SfoEntryContainer* entry = calloc(1, sizeof(*entry));
-		memcpy(entry, &sfoDefaults[i], sizeof(*entry));
+		neon_memcpy(entry, &sfoDefaults[i], sizeof(*entry));
 		HashTableInsert(sfo, entry->name, entry);
 	}
 }
@@ -151,7 +151,7 @@ bool SfoWrite(struct Table* sfo, struct VFile* vf) {
 	uint32_t dataSize = 0;
 	size_t i = 0;
 	do {
-		memcpy(&sortedEntries[i], TableIteratorGetValue(sfo, &iter), sizeof(struct SfoEntryContainer));
+		neon_memcpy(&sortedEntries[i], TableIteratorGetValue(sfo, &iter), sizeof(struct SfoEntryContainer));
 		keysSize += strlen(sortedEntries[i].name) + 1;
 		if (!sortedEntries[i].size) {
 			switch (sortedEntries[i].type) {

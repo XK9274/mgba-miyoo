@@ -11,7 +11,7 @@
 // 1. addition of a PNG_CLEANUP macro,
 // 2. setting the option to ignore ADLER32 checksums,
 // 3. adding "#include <string.h>" which is needed on some platforms
-//    to provide memcpy().
+//    to provide neon_memcpy().
 // 4. adding read_end_info() and creating an end_info structure.
 // 5. adding calls to png_set_*() transforms commonly used by browsers.
 
@@ -73,7 +73,7 @@ void user_read_data(png_structp png_ptr, png_bytep data, size_t length) {
   if (length > buf_state->bytes_left) {
     png_error(png_ptr, "read error");
   }
-  memcpy(data, buf_state->data, length);
+  neon_memcpy(data, buf_state->data, length);
   buf_state->bytes_left -= length;
   buf_state->data += length;
 }

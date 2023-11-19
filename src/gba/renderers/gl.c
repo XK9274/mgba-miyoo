@@ -1365,7 +1365,7 @@ void GBAVideoGLRendererDrawScanline(struct GBAVideoRenderer* renderer, int y) {
 		glRenderer->nextPalette = 0;
 	}
 	if (glRenderer->paletteDirty) {
-		memcpy(glRenderer->shadowPalette[glRenderer->nextPalette], glRenderer->shadowPalette[oldPalette], sizeof(glRenderer->shadowPalette[0]));
+		neon_memcpy(glRenderer->shadowPalette[glRenderer->nextPalette], glRenderer->shadowPalette[oldPalette], sizeof(glRenderer->shadowPalette[0]));
 		if (glRenderer->paletteDirtyScanlines > 0) {
 			--glRenderer->paletteDirtyScanlines;
 		}

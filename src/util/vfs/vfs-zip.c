@@ -323,7 +323,7 @@ ssize_t _vfzRead(struct VFile* vf, void* buffer, size_t size) {
 			}
 			if (buffer) {
 				void* bufferOffset = &((uint8_t*) buffer)[bytesRead];
-				memcpy(bufferOffset, start, diff);
+				neon_memcpy(bufferOffset, start, diff);
 			}
 			vfz->offset += diff;
 			bytesRead += diff;
@@ -377,7 +377,7 @@ ssize_t _vfzWrite(struct VFile* vf, const void* buffer, size_t size) {
 
 	void* start = &((uint8_t*) vfz->buffer)[vfz->offset];
 	if (buffer) {
-		memcpy(start, buffer, size);
+		neon_memcpy(start, buffer, size);
 	} else {
 		memset(start, 0, size);
 	}

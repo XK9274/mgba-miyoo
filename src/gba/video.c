@@ -110,7 +110,7 @@ void GBAVideoDummyRendererCreate(struct GBAVideoRenderer* renderer) {
 		.getPixels = GBAVideoDummyRendererGetPixels,
 		.putPixels = GBAVideoDummyRendererPutPixels,
 	};
-	memcpy(renderer, &dummyRenderer, sizeof(*renderer));
+	neon_memcpy(renderer, &dummyRenderer, sizeof(*renderer));
 }
 
 void GBAVideoAssociateRenderer(struct GBAVideo* video, struct GBAVideoRenderer* renderer) {
@@ -325,9 +325,9 @@ static void GBAVideoDummyRendererPutPixels(struct GBAVideoRenderer* renderer, si
 }
 
 void GBAVideoSerialize(const struct GBAVideo* video, struct GBASerializedState* state) {
-	memcpy(state->vram, video->vram, GBA_SIZE_VRAM);
-	memcpy(state->oam, video->oam.raw, GBA_SIZE_OAM);
-	memcpy(state->pram, video->palette, GBA_SIZE_PALETTE_RAM);
+	neon_memcpy(state->vram, video->vram, GBA_SIZE_VRAM);
+	neon_memcpy(state->oam, video->oam.raw, GBA_SIZE_OAM);
+	neon_memcpy(state->pram, video->palette, GBA_SIZE_PALETTE_RAM);
 	STORE_32(video->event.when - mTimingCurrentTime(&video->p->timing), 0, &state->video.nextEvent);
 	int32_t flags = 0;
 	if (video->event.callback == _startHdraw) {
@@ -340,7 +340,7 @@ void GBAVideoSerialize(const struct GBAVideo* video, struct GBASerializedState* 
 }
 
 void GBAVideoDeserialize(struct GBAVideo* video, const struct GBASerializedState* state) {
-	memcpy(video->vram, state->vram, GBA_SIZE_VRAM);
+	neon_memcpy(video->vram, state->vram, GBA_SIZE_VRAM);
 	uint16_t value;
 	int i;
 	for (i = 0; i < GBA_SIZE_OAM; i += 2) {

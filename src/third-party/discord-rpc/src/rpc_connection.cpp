@@ -69,7 +69,7 @@ void RpcConnection::Close()
 bool RpcConnection::Write(const void* data, size_t length)
 {
     sendFrame.opcode = Opcode::Frame;
-    memcpy(sendFrame.message, data, length);
+    neon_memcpy(sendFrame.message, data, length);
     sendFrame.length = (uint32_t)length;
     if (!connection->Write(&sendFrame, sizeof(MessageFrameHeader) + length)) {
         Close();

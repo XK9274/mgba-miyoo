@@ -1282,7 +1282,7 @@ enum GUIKeyboardStatus _keyboardRun(struct GUIKeyboardParams* keyboard) {
 				if (position + copySize > keyboard->maxLen) {
 					copySize = keyboard->maxLen - position;
 				}
-				memcpy(&keyboard->result[position], curKey->data, copySize);
+				neon_memcpy(&keyboard->result[position], curKey->data, copySize);
 				position += copySize;
 				if (tempKbd) {
 					tempKbd = false;
@@ -1506,7 +1506,7 @@ void _unpaused(struct mGUIRunner* runner) {
 
 void _prepareForFrame(struct mGUIRunner* runner) {
 	if (interframeBlending) {
-		memcpy(interframeTexmem, texmem, TEX_W * TEX_H * BYTES_PER_PIXEL);
+		neon_memcpy(interframeTexmem, texmem, TEX_W * TEX_H * BYTES_PER_PIXEL);
 	}
 }
 

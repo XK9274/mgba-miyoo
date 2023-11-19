@@ -3976,14 +3976,14 @@ main(int argc, const char **argv)
                   continue;
                }
 
-               memcpy(temp_name, prefix, prefixlen);
-               memcpy(temp_name+prefixlen, *argv, outlen);
+               neon_memcpy(temp_name, prefix, prefixlen);
+               neon_memcpy(temp_name+prefixlen, *argv, outlen);
                outlen += prefixlen;
                outfile = temp_name;
             }
 
             else if (suffix != NULL)
-               memcpy(temp_name, *argv, outlen);
+               neon_memcpy(temp_name, *argv, outlen);
 
             temp_name[outlen] = 0;
 
@@ -3999,7 +3999,7 @@ main(int argc, const char **argv)
                   continue;
                }
 
-               memcpy(temp_name+outlen, suffix, suffixlen);
+               neon_memcpy(temp_name+outlen, suffix, suffixlen);
                outlen += suffixlen;
                temp_name[outlen] = 0;
                outfile = temp_name;

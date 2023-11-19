@@ -45,7 +45,7 @@ int Lzma86_Encode(Byte *dest, size_t *destLen, const Byte *src, size_t srcLen,
       filteredStream = (Byte *)MyAlloc(srcLen);
       if (filteredStream == 0)
         return SZ_ERROR_MEM;
-      memcpy(filteredStream, src, srcLen);
+      neon_memcpy(filteredStream, src, srcLen);
     }
     {
       UInt32 x86State;

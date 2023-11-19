@@ -432,9 +432,9 @@ bool GBALoadROM(struct GBA* gba, struct VFile* vf) {
 		gba->memory.rom = anonymousMemoryMap(GBA_SIZE_ROM0);
 #endif
 		vf->read(vf, gba->memory.rom, gba->pristineRomSize);
-		memcpy(&gba->memory.rom[0x40000], gba->memory.rom, 0x00100000);
-		memcpy(&gba->memory.rom[0x80000], gba->memory.rom, 0x00100000);
-		memcpy(&gba->memory.rom[0xC0000], gba->memory.rom, 0x00100000);
+		neon_memcpy(&gba->memory.rom[0x40000], gba->memory.rom, 0x00100000);
+		neon_memcpy(&gba->memory.rom[0x80000], gba->memory.rom, 0x00100000);
+		neon_memcpy(&gba->memory.rom[0xC0000], gba->memory.rom, 0x00100000);
 	} else {
 		gba->memory.rom = vf->map(vf, gba->pristineRomSize, MAP_READ);
 		gba->memory.romSize = gba->pristineRomSize;
@@ -451,7 +451,7 @@ bool GBALoadROM(struct GBA* gba, struct VFile* vf) {
 		// This ROM is either a bad dump or homebrew. Emulate flash cart behavior.
 #ifndef FIXED_ROM_BUFFER
 		void* newRom = anonymousMemoryMap(GBA_SIZE_ROM0);
-		memcpy(newRom, gba->memory.rom, gba->pristineRomSize);
+		neon_memcpy(newRom, gba->memory.rom, gba->pristineRomSize);
 		gba->memory.rom = newRom;
 #endif
 		gba->memory.romSize = GBA_SIZE_ROM0;
@@ -830,17 +830,17 @@ void GBAGetGameCode(const struct GBA* gba, char* out) {
 		return;
 	}
 
-	memcpy(out, "AGB-", 4);
-	memcpy(&out[4], &((struct GBACartridge*) gba->memory.rom)->id, 4);
+	neon_memcpy(out, "AGB-", 4);
+	neon_memcpy(&out[4], &((struct GBACartridge*) gba->memory.rom)->id, 4);
 }
 
 void GBAGetGameTitle(const struct GBA* gba, char* out) {
 	if (gba->memory.rom) {
-		memcpy(out, &((struct GBACartridge*) gba->memory.rom)->title, 12);
+		neon_memcpy(out, &((struct GBACartridge*) gba->memory.rom)->title, 12);
 		return;
 	}
 	if (gba->isPristine && gba->memory.wram) {
-		memcpy(out, &((struct GBACartridge*) gba->memory.wram)->title, 12);
+		neon_memcpy(out, &((struct GBACartridge*) gba->memory.wram)->title, 12);
 		return;
 	}
 	strncpy(out, "(BIOS)", 12);

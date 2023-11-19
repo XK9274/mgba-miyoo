@@ -217,7 +217,7 @@ static uint8_t GBPrinterWriteSC(struct GBSIODriver* driver, uint8_t value) {
 						lineBuffer[(((i >> 1) & 0x7) * GB_VIDEO_HORIZONTAL_PIXELS / 4) + ((i >> 3) & ~1)] = olo;
 						lineBuffer[(((i >> 1) & 0x7) * GB_VIDEO_HORIZONTAL_PIXELS / 4) + ((i >> 3) |  1)] = ohi;
 					}
-					memcpy(buffer, lineBuffer, sizeof(lineBuffer));
+					neon_memcpy(buffer, lineBuffer, sizeof(lineBuffer));
 				}
 				printer->print(printer, printer->currentIndex * 4 / GB_VIDEO_HORIZONTAL_PIXELS, printer->buffer);
 			}

@@ -195,7 +195,7 @@ static SRes BraState_Code2(void *pp,
       size_t size = p->bufConv - p->bufPos;
       if (size > destRem)
         size = destRem;
-      memcpy(dest, p->buf + p->bufPos, size);
+      neon_memcpy(dest, p->buf + p->bufPos, size);
       p->bufPos += size;
       *destLen += size;
       dest += size;
@@ -211,7 +211,7 @@ static SRes BraState_Code2(void *pp,
       size_t size = BRA_BUF_SIZE - p->bufTotal;
       if (size > srcRem)
         size = srcRem;
-      memcpy(p->buf + p->bufTotal, src, size);
+      neon_memcpy(p->buf + p->bufTotal, src, size);
       *srcLen += size;
       src += size;
       srcRem -= size;
@@ -838,7 +838,7 @@ SRes XzBlock_Parse(CXzBlock *p, const Byte *header)
     if (size > headerSize - pos || size > XZ_FILTER_PROPS_SIZE_MAX)
       return SZ_ERROR_ARCHIVE;
     filter->propsSize = (UInt32)size;
-    memcpy(filter->props, header + pos, (size_t)size);
+    neon_memcpy(filter->props, header + pos, (size_t)size);
     pos += (unsigned)size;
 
     #ifdef XZ_DUMP
@@ -1146,7 +1146,7 @@ SRes XzUnpacker_Code(CXzUnpacker *p, Byte *dest, SizeT *destLen,
           UInt32 cur = p->blockHeaderSize - p->pos;
           if (cur > srcRem)
             cur = (UInt32)srcRem;
-          memcpy(p->buf + p->pos, src, cur);
+          neon_memcpy(p->buf + p->pos, src, cur);
           p->pos += cur;
           (*srcLen) += cur;
           src += cur;
@@ -1198,7 +1198,7 @@ SRes XzUnpacker_Code(CXzUnpacker *p, Byte *dest, SizeT *destLen,
             }
             if (cur > srcRem)
               cur = (UInt32)srcRem;
-            memcpy(p->buf + p->pos, src, cur);
+            neon_memcpy(p->buf + p->pos, src, cur);
             p->pos += cur;
             (*srcLen) += cur;
             src += cur;
@@ -1288,7 +1288,7 @@ SRes XzUnpacker_Code(CXzUnpacker *p, Byte *dest, SizeT *destLen,
         UInt32 cur = XZ_STREAM_FOOTER_SIZE - p->pos;
         if (cur > srcRem)
           cur = (UInt32)srcRem;
-        memcpy(p->buf + p->pos, src, cur);
+        neon_memcpy(p->buf + p->pos, src, cur);
         p->pos += cur;
         (*srcLen) += cur;
         src += cur;
@@ -2153,7 +2153,7 @@ static SRes XzDecMt_Callback_Write(void *pp, unsigned coderIndex,
           Byte *crossBuf = MtDec_GetCrossBuff(&me->mtc);
           if (!crossBuf)
             return SZ_ERROR_MEM;
-          memcpy(crossBuf, src + srcProcessed, srcSize - srcProcessed);
+          neon_memcpy(crossBuf, src + srcProcessed, srcSize - srcProcessed);
         }
         me->mtc.crossStart = 0;
         me->mtc.crossEnd = srcSize - srcProcessed;

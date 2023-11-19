@@ -244,7 +244,7 @@ static void GBASetActiveRegion(struct ARMCore* cpu, uint32_t address) {
 			if (address == gba->lastJump) {
 				switch (gba->idleDetectionStep) {
 				case 0:
-					memcpy(gba->cachedRegisters, cpu->gprs, sizeof(gba->cachedRegisters));
+					neon_memcpy(gba->cachedRegisters, cpu->gprs, sizeof(gba->cachedRegisters));
 					++gba->idleDetectionStep;
 					break;
 				case 1:
@@ -945,7 +945,7 @@ void GBAStore16(struct ARMCore* cpu, uint32_t address, int16_t value, int* cycle
 						}
 						memory->agbPrintBase = base;
 						memory->agbPrintBufferBackup = anonymousMemoryMap(GBA_SIZE_AGB_PRINT);
-						memcpy(memory->agbPrintBufferBackup, &memory->rom[(AGB_PRINT_TOP | base) >> 2], GBA_SIZE_AGB_PRINT);
+						neon_memcpy(memory->agbPrintBufferBackup, &memory->rom[(AGB_PRINT_TOP | base) >> 2], GBA_SIZE_AGB_PRINT);
 						LOAD_16(memory->agbPrintProtectBackup, AGB_PRINT_PROTECT | base, memory->rom);
 						LOAD_16(memory->agbPrintCtxBackup.request, AGB_PRINT_STRUCT | base, memory->rom);
 						LOAD_16(memory->agbPrintCtxBackup.bank, (AGB_PRINT_STRUCT | base) + 2, memory->rom);
@@ -1684,7 +1684,7 @@ void GBAAdjustWaitstates(struct GBA* gba, uint16_t parameters) {
 		int phi = (parameters >> 11) & 3;
 		uint32_t base = memory->agbPrintBase;
 		if (phi == 3) {
-			memcpy(&memory->rom[(AGB_PRINT_TOP | base) >> 2], memory->agbPrintBuffer, GBA_SIZE_AGB_PRINT);
+			neon_memcpy(&memory->rom[(AGB_PRINT_TOP | base) >> 2], memory->agbPrintBuffer, GBA_SIZE_AGB_PRINT);
 			STORE_16(memory->agbPrintProtect, AGB_PRINT_PROTECT | base, memory->rom);
 			STORE_16(memory->agbPrintCtx.request, AGB_PRINT_STRUCT | base, memory->rom);
 			STORE_16(memory->agbPrintCtx.bank, (AGB_PRINT_STRUCT | base) + 2, memory->rom);
@@ -1692,7 +1692,7 @@ void GBAAdjustWaitstates(struct GBA* gba, uint16_t parameters) {
 			STORE_16(memory->agbPrintCtx.put, (AGB_PRINT_STRUCT | base) + 6, memory->rom);
 			STORE_32(_agbPrintFunc, AGB_PRINT_FLUSH_ADDR | base, memory->rom);
 		} else {
-			memcpy(&memory->rom[(AGB_PRINT_TOP | base) >> 2], memory->agbPrintBufferBackup, GBA_SIZE_AGB_PRINT);
+			neon_memcpy(&memory->rom[(AGB_PRINT_TOP | base) >> 2], memory->agbPrintBufferBackup, GBA_SIZE_AGB_PRINT);
 			STORE_16(memory->agbPrintProtectBackup, AGB_PRINT_PROTECT | base, memory->rom);
 			STORE_16(memory->agbPrintCtxBackup.request, AGB_PRINT_STRUCT | base, memory->rom);
 			STORE_16(memory->agbPrintCtxBackup.bank, (AGB_PRINT_STRUCT | base) + 2, memory->rom);
@@ -1795,13 +1795,13 @@ int32_t GBAMemoryStallVRAM(struct GBA* gba, int32_t wait, int extra) {
 }
 
 void GBAMemorySerialize(const struct GBAMemory* memory, struct GBASerializedState* state) {
-	memcpy(state->wram, memory->wram, GBA_SIZE_EWRAM);
-	memcpy(state->iwram, memory->iwram, GBA_SIZE_IWRAM);
+	neon_memcpy(state->wram, memory->wram, GBA_SIZE_EWRAM);
+	neon_memcpy(state->iwram, memory->iwram, GBA_SIZE_IWRAM);
 }
 
 void GBAMemoryDeserialize(struct GBAMemory* memory, const struct GBASerializedState* state) {
-	memcpy(memory->wram, state->wram, GBA_SIZE_EWRAM);
-	memcpy(memory->iwram, state->iwram, GBA_SIZE_IWRAM);
+	neon_memcpy(memory->wram, state->wram, GBA_SIZE_EWRAM);
+	neon_memcpy(memory->iwram, state->iwram, GBA_SIZE_IWRAM);
 }
 
 void _pristineCow(struct GBA* gba) {
@@ -1810,7 +1810,7 @@ void _pristineCow(struct GBA* gba) {
 	}
 #if !defined(FIXED_ROM_BUFFER) && !defined(__wii__)
 	void* newRom = anonymousMemoryMap(GBA_SIZE_ROM0);
-	memcpy(newRom, gba->memory.rom, gba->memory.romSize);
+	neon_memcpy(newRom, gba->memory.rom, gba->memory.romSize);
 	memset(((uint8_t*) newRom) + gba->memory.romSize, 0xFF, GBA_SIZE_ROM0 - gba->memory.romSize);
 	if (gba->cpu->memory.activeRegion == gba->memory.rom) {
 		gba->cpu->memory.activeRegion = newRom;

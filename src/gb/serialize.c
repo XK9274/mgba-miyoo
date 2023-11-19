@@ -23,7 +23,7 @@ void GBSerialize(struct GB* gb, struct GBSerializedState* state) {
 	STORE_64LE(gb->timing.globalCycles, 0, &state->globalCycles);
 
 	if (gb->memory.rom) {
-		memcpy(state->title, ((struct GBCartridge*) &gb->memory.rom[0x100])->titleLong, sizeof(state->title));
+		neon_memcpy(state->title, ((struct GBCartridge*) &gb->memory.rom[0x100])->titleLong, sizeof(state->title));
 	} else {
 		memset(state->title, 0, sizeof(state->title));
 	}
@@ -236,23 +236,23 @@ void GBSGBSerialize(struct GB* gb, struct GBSerializedState* state) {
 	flags = GBSerializedSGBFlagsSetCurrentController(flags, gb->sgbCurrentController);
 	STORE_32LE(flags, 0, &state->sgb.flags);
 
-	memcpy(state->sgb.packet, gb->video.sgbPacketBuffer, sizeof(state->sgb.packet));
-	memcpy(state->sgb.inProgressPacket, gb->sgbPacket, sizeof(state->sgb.inProgressPacket));
+	neon_memcpy(state->sgb.packet, gb->video.sgbPacketBuffer, sizeof(state->sgb.packet));
+	neon_memcpy(state->sgb.inProgressPacket, gb->sgbPacket, sizeof(state->sgb.inProgressPacket));
 
 	if (gb->video.renderer->sgbCharRam) {
-		memcpy(state->sgb.charRam, gb->video.renderer->sgbCharRam, sizeof(state->sgb.charRam));
+		neon_memcpy(state->sgb.charRam, gb->video.renderer->sgbCharRam, sizeof(state->sgb.charRam));
 	}
 	if (gb->video.renderer->sgbMapRam) {
-		memcpy(state->sgb.mapRam, gb->video.renderer->sgbMapRam, sizeof(state->sgb.mapRam));
+		neon_memcpy(state->sgb.mapRam, gb->video.renderer->sgbMapRam, sizeof(state->sgb.mapRam));
 	}
 	if (gb->video.renderer->sgbPalRam) {
-		memcpy(state->sgb.palRam, gb->video.renderer->sgbPalRam, sizeof(state->sgb.palRam));
+		neon_memcpy(state->sgb.palRam, gb->video.renderer->sgbPalRam, sizeof(state->sgb.palRam));
 	}
 	if (gb->video.renderer->sgbAttributeFiles) {
-		memcpy(state->sgb.atfRam, gb->video.renderer->sgbAttributeFiles, sizeof(state->sgb.atfRam));
+		neon_memcpy(state->sgb.atfRam, gb->video.renderer->sgbAttributeFiles, sizeof(state->sgb.atfRam));
 	}
 	if (gb->video.renderer->sgbAttributes) {
-		memcpy(state->sgb.attributes, gb->video.renderer->sgbAttributes, sizeof(state->sgb.attributes));
+		neon_memcpy(state->sgb.attributes, gb->video.renderer->sgbAttributes, sizeof(state->sgb.attributes));
 	}
 }
 
@@ -274,8 +274,8 @@ void GBSGBDeserialize(struct GB* gb, const struct GBSerializedState* state) {
 		gb->sgbIncrement = true;
 	}
 
-	memcpy(gb->video.sgbPacketBuffer, state->sgb.packet, sizeof(state->sgb.packet));
-	memcpy(gb->sgbPacket, state->sgb.inProgressPacket, sizeof(state->sgb.inProgressPacket));
+	neon_memcpy(gb->video.sgbPacketBuffer, state->sgb.packet, sizeof(state->sgb.packet));
+	neon_memcpy(gb->sgbPacket, state->sgb.inProgressPacket, sizeof(state->sgb.inProgressPacket));
 
 	if (!gb->video.renderer->sgbCharRam) {
 		gb->video.renderer->sgbCharRam = anonymousMemoryMap(SGB_SIZE_CHAR_RAM);
@@ -293,11 +293,11 @@ void GBSGBDeserialize(struct GB* gb, const struct GBSerializedState* state) {
 		gb->video.renderer->sgbAttributes = malloc(90 * 45);
 	}
 
-	memcpy(gb->video.renderer->sgbCharRam, state->sgb.charRam, sizeof(state->sgb.charRam));
-	memcpy(gb->video.renderer->sgbMapRam, state->sgb.mapRam, sizeof(state->sgb.mapRam));
-	memcpy(gb->video.renderer->sgbPalRam, state->sgb.palRam, sizeof(state->sgb.palRam));
-	memcpy(gb->video.renderer->sgbAttributeFiles, state->sgb.atfRam, sizeof(state->sgb.atfRam));
-	memcpy(gb->video.renderer->sgbAttributes, state->sgb.attributes, sizeof(state->sgb.attributes));
+	neon_memcpy(gb->video.renderer->sgbCharRam, state->sgb.charRam, sizeof(state->sgb.charRam));
+	neon_memcpy(gb->video.renderer->sgbMapRam, state->sgb.mapRam, sizeof(state->sgb.mapRam));
+	neon_memcpy(gb->video.renderer->sgbPalRam, state->sgb.palRam, sizeof(state->sgb.palRam));
+	neon_memcpy(gb->video.renderer->sgbAttributeFiles, state->sgb.atfRam, sizeof(state->sgb.atfRam));
+	neon_memcpy(gb->video.renderer->sgbAttributes, state->sgb.attributes, sizeof(state->sgb.attributes));
 
 	GBVideoWriteSGBPacket(&gb->video, (uint8_t[16]) { (SGB_ATRC_EN << 3) | 1, 0 });
 }

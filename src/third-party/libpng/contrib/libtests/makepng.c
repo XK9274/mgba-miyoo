@@ -1120,11 +1120,11 @@ load_fake(png_charp param, png_bytepp profile)
          {
             while (size >= len)
             {
-               memcpy(out, endptr, len);
+               neon_memcpy(out, endptr, len);
                out += len;
                size -= len;
             }
-            memcpy(out, endptr, size);
+            neon_memcpy(out, endptr, size);
          }
 
          return result;
@@ -1592,7 +1592,7 @@ strstash_list(const png_const_charp *text)
    while (*line != NULL)
    {
       foo = strlen(*line);
-      memcpy(bar, *line++, foo);
+      neon_memcpy(bar, *line++, foo);
       bar += foo;
    }
 

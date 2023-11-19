@@ -1215,7 +1215,7 @@ void CoreController::finishFrame() {
 		m_threadContext.core->currentVideoSize(m_threadContext.core, &width, &height);
 
 		QMutexLocker locker(&m_bufferMutex);
-		memcpy(m_completeBuffer.data(), m_activeBuffer.constData(), width * height * BYTES_PER_PIXEL);
+		neon_memcpy(m_completeBuffer.data(), m_activeBuffer.constData(), width * height * BYTES_PER_PIXEL);
 	}
 
 	{

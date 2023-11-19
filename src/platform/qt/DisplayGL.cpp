@@ -906,7 +906,7 @@ void PainterGL::enqueue(const uint32_t* backing) {
 		}
 		if (buffer) {
 			QSize size = m_context->screenDimensions();
-			memcpy(buffer, backing, size.width() * size.height() * BYTES_PER_PIXEL);
+			neon_memcpy(buffer, backing, size.width() * size.height() * BYTES_PER_PIXEL);
 		}
 	}
 	m_queue.enqueue(buffer);

@@ -497,7 +497,7 @@ int ZEXPORT deflateGetDictionary (strm, dictionary, dictLength)
     if (len > s->w_size)
         len = s->w_size;
     if (dictionary != Z_NULL && len)
-        zmemcpy(dictionary, s->window + s->strstart + s->lookahead - len, len);
+        z_memcpy(dictionary, s->window + s->strstart + s->lookahead - len, len);
     if (dictLength != Z_NULL)
         *dictLength = len;
     return Z_OK;
@@ -779,7 +779,7 @@ local void flush_pending(strm)
     if (len > strm->avail_out) len = strm->avail_out;
     if (len == 0) return;
 
-    zmemcpy(strm->next_out, s->pending_out, len);
+    z_memcpy(strm->next_out, s->pending_out, len);
     strm->next_out  += len;
     s->pending_out  += len;
     strm->total_out += len;
@@ -946,7 +946,7 @@ int ZEXPORT deflate (strm, flush)
             uInt left = (s->gzhead->extra_len & 0xffff) - s->gzindex;
             while (s->pending + left > s->pending_buf_size) {
                 uInt copy = s->pending_buf_size - s->pending;
-                zmemcpy(s->pending_buf + s->pending,
+                z_memcpy(s->pending_buf + s->pending,
                         s->gzhead->extra + s->gzindex, copy);
                 s->pending = s->pending_buf_size;
                 HCRC_UPDATE(beg);
@@ -959,7 +959,7 @@ int ZEXPORT deflate (strm, flush)
                 beg = 0;
                 left -= copy;
             }
-            zmemcpy(s->pending_buf + s->pending,
+            z_memcpy(s->pending_buf + s->pending,
                     s->gzhead->extra + s->gzindex, left);
             s->pending += left;
             HCRC_UPDATE(beg);
@@ -1159,12 +1159,12 @@ int ZEXPORT deflateCopy (dest, source)
 
     ss = source->state;
 
-    zmemcpy((voidpf)dest, (voidpf)source, sizeof(z_stream));
+    z_memcpy((voidpf)dest, (voidpf)source, sizeof(z_stream));
 
     ds = (deflate_state *) ZALLOC(dest, 1, sizeof(deflate_state));
     if (ds == Z_NULL) return Z_MEM_ERROR;
     dest->state = (struct internal_state FAR *) ds;
-    zmemcpy((voidpf)ds, (voidpf)ss, sizeof(deflate_state));
+    z_memcpy((voidpf)ds, (voidpf)ss, sizeof(deflate_state));
     ds->strm = dest;
 
     ds->window = (Bytef *) ZALLOC(dest, ds->w_size, 2*sizeof(Byte));
@@ -1177,11 +1177,11 @@ int ZEXPORT deflateCopy (dest, source)
         deflateEnd (dest);
         return Z_MEM_ERROR;
     }
-    /* following zmemcpy do not work for 16-bit MSDOS */
-    zmemcpy(ds->window, ss->window, ds->w_size * 2 * sizeof(Byte));
-    zmemcpy((voidpf)ds->prev, (voidpf)ss->prev, ds->w_size * sizeof(Pos));
-    zmemcpy((voidpf)ds->head, (voidpf)ss->head, ds->hash_size * sizeof(Pos));
-    zmemcpy(ds->pending_buf, ss->pending_buf, (uInt)ds->pending_buf_size);
+    /* following z_memcpy do not work for 16-bit MSDOS */
+    z_memcpy(ds->window, ss->window, ds->w_size * 2 * sizeof(Byte));
+    z_memcpy((voidpf)ds->prev, (voidpf)ss->prev, ds->w_size * sizeof(Pos));
+    z_memcpy((voidpf)ds->head, (voidpf)ss->head, ds->hash_size * sizeof(Pos));
+    z_memcpy(ds->pending_buf, ss->pending_buf, (uInt)ds->pending_buf_size);
 
     ds->pending_out = ds->pending_buf + (ss->pending_out - ss->pending_buf);
     ds->sym_buf = ds->pending_buf + ds->lit_bufsize;
@@ -1213,7 +1213,7 @@ local unsigned read_buf(strm, buf, size)
 
     strm->avail_in  -= len;
 
-    zmemcpy(buf, strm->next_in, len);
+    z_memcpy(buf, strm->next_in, len);
     if (strm->state->wrap == 1) {
         strm->adler = adler32(strm->adler, buf, len);
     }
@@ -1549,7 +1549,7 @@ local void fill_window(s)
          */
         if (s->strstart >= wsize+MAX_DIST(s)) {
 
-            zmemcpy(s->window, s->window+wsize, (unsigned)wsize - more);
+            z_memcpy(s->window, s->window+wsize, (unsigned)wsize - more);
             s->match_start -= wsize;
             s->strstart    -= wsize; /* we now have strstart >= MAX_DIST */
             s->block_start -= (long) wsize;
@@ -1750,7 +1750,7 @@ local block_state deflate_stored(s, flush)
         if (left) {
             if (left > len)
                 left = len;
-            zmemcpy(s->strm->next_out, s->window + s->block_start, left);
+            z_memcpy(s->strm->next_out, s->window + s->block_start, left);
             s->strm->next_out += left;
             s->strm->avail_out -= left;
             s->strm->total_out += left;
@@ -1782,7 +1782,7 @@ local block_state deflate_stored(s, flush)
          */
         if (used >= s->w_size) {    /* supplant the previous history */
             s->matches = 2;         /* clear hash */
-            zmemcpy(s->window, s->strm->next_in - s->w_size, s->w_size);
+            z_memcpy(s->window, s->strm->next_in - s->w_size, s->w_size);
             s->strstart = s->w_size;
             s->insert = s->strstart;
         }
@@ -1790,13 +1790,13 @@ local block_state deflate_stored(s, flush)
             if (s->window_size - s->strstart <= used) {
                 /* Slide the window down. */
                 s->strstart -= s->w_size;
-                zmemcpy(s->window, s->window + s->w_size, s->strstart);
+                z_memcpy(s->window, s->window + s->w_size, s->strstart);
                 if (s->matches < 2)
                     s->matches++;   /* add a pending slide_hash() */
                 if (s->insert > s->strstart)
                     s->insert = s->strstart;
             }
-            zmemcpy(s->window + s->strstart, s->strm->next_in - used, used);
+            z_memcpy(s->window + s->strstart, s->strm->next_in - used, used);
             s->strstart += used;
             s->insert += MIN(used, s->w_size - s->insert);
         }
@@ -1820,7 +1820,7 @@ local block_state deflate_stored(s, flush)
         /* Slide the window down. */
         s->block_start -= s->w_size;
         s->strstart -= s->w_size;
-        zmemcpy(s->window, s->window + s->w_size, s->strstart);
+        z_memcpy(s->window, s->window + s->w_size, s->strstart);
         if (s->matches < 2)
             s->matches++;           /* add a pending slide_hash() */
         have += s->w_size;          /* more space now */

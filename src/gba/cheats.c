@@ -249,11 +249,11 @@ static void GBACheatSetCopyProperties(struct mCheatSet* set, struct mCheatSet* o
 	struct GBACheatSet* newSet = (struct GBACheatSet*) set;
 	struct GBACheatSet* gbaset = (struct GBACheatSet*) oldSet;
 	newSet->gsaVersion = gbaset->gsaVersion;
-	memcpy(newSet->gsaSeeds, gbaset->gsaSeeds, sizeof(newSet->gsaSeeds));
+	neon_memcpy(newSet->gsaSeeds, gbaset->gsaSeeds, sizeof(newSet->gsaSeeds));
 	newSet->cbRngState = gbaset->cbRngState;
 	newSet->cbMaster = gbaset->cbMaster;
-	memcpy(newSet->cbSeeds, gbaset->cbSeeds, sizeof(newSet->cbSeeds));
-	memcpy(newSet->cbTable, gbaset->cbTable, sizeof(newSet->cbTable));
+	neon_memcpy(newSet->cbSeeds, gbaset->cbSeeds, sizeof(newSet->cbSeeds));
+	neon_memcpy(newSet->cbTable, gbaset->cbTable, sizeof(newSet->cbTable));
 	if (gbaset->hook) {
 		if (newSet->hook) {
 			--newSet->hook->refs;

@@ -1246,7 +1246,7 @@ PNG_INTERNAL_FUNCTION(void,png_write_start_row,(png_structrp png_ptr),
 
 /* Combine a row of data, dealing with alpha, etc. if requested.  'row' is an
  * array of png_ptr->width pixels.  If the image is not interlaced or this
- * is the final pass this just does a memcpy, otherwise the "display" flag
+ * is the final pass this just does a neon_memcpy, otherwise the "display" flag
  * is used to determine whether to copy pixels that are not in the current pass.
  *
  * Because 'png_do_read_interlace' (below) replicates pixels this allows this
@@ -1254,7 +1254,7 @@ PNG_INTERNAL_FUNCTION(void,png_write_start_row,(png_structrp png_ptr),
  * if display is 1 and the 'sparkle' appearance, where existing pixels in 'row'
  * are not changed if they are not in the current pass, when display is 0.
  *
- * 'display' must be 0 or 1, otherwise the memcpy will be done regardless.
+ * 'display' must be 0 or 1, otherwise the neon_memcpy will be done regardless.
  *
  * The API always reads from the png_struct row buffer and always assumes that
  * it is full width (png_do_read_interlace has already been called.)

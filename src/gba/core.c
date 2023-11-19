@@ -614,7 +614,7 @@ static void _GBACoreChecksum(const struct mCore* core, void* data, enum mCoreChe
 	const struct GBA* gba = (const struct GBA*) core->board;
 	switch (type) {
 	case mCHECKSUM_CRC32:
-		memcpy(data, &gba->romCrc32, sizeof(gba->romCrc32));
+		neon_memcpy(data, &gba->romCrc32, sizeof(gba->romCrc32));
 		break;
 	}
 	return;

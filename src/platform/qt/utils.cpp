@@ -57,7 +57,7 @@ bool convertAddress(const QHostAddress* input, Address* output) {
 	case QAbstractSocket::IPv6Protocol:
 		output->version = IPV6;
 		ipv6 = input->toIPv6Address();
-		memcpy(output->ipv6, &ipv6, 16);
+		neon_memcpy(output->ipv6, &ipv6, 16);
 		break;
 	default:
 		return false;

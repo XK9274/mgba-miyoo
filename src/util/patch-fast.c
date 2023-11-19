@@ -103,7 +103,7 @@ bool _fastApplyPatch(struct Patch* p, const void* in, size_t inSize, void* out, 
 		if (extent->length + extent->offset > outSize) {
 			return false;
 		}
-		memcpy(optr, iptr, extent->offset - lastWritten);
+		neon_memcpy(optr, iptr, extent->offset - lastWritten);
 		optr = (uint32_t*) out + extent->offset / 4;
 		iptr = (uint32_t*) in + extent->offset / 4;
 		uint32_t* eptr = extent->extent;
@@ -125,6 +125,6 @@ bool _fastApplyPatch(struct Patch* p, const void* in, size_t inSize, void* out, 
 		}
 		lastWritten = extent->offset + off;
 	}
-	memcpy(optr, iptr, outSize - lastWritten);
+	neon_memcpy(optr, iptr, outSize - lastWritten);
 	return true;
 }
